@@ -31,7 +31,7 @@ export const TimerArc = ({ phase, timeLeft, totalTime }: TimerArcProps) => {
       <svg
         height={radius * 2}
         width={radius * 2}
-        className="transform -rotate-[135deg]"
+        className="transform -rotate-90"
       >
         {/* Background arc */}
         <circle

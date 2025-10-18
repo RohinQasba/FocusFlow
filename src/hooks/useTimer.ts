@@ -7,6 +7,7 @@ export interface TimerSettings {
   shortBreakDuration: number;
   longBreakDuration: number;
   autoStartNextPhase: boolean;
+  brownNoiseEnabled: boolean;
 }
 
 const DEFAULT_SETTINGS: TimerSettings = {
@@ -14,6 +15,7 @@ const DEFAULT_SETTINGS: TimerSettings = {
   shortBreakDuration: 5,
   longBreakDuration: 15,
   autoStartNextPhase: true,
+  brownNoiseEnabled: true,
 };
 
 export const useTimer = () => {

@@ -111,6 +111,21 @@ export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps)
               }}
             />
           </div>
+          <div className="flex items-center justify-between">
+            <Label htmlFor="brownNoise" className="flex-1">
+              Brown Noise (Work Phase)
+            </Label>
+            <Switch
+              id="brownNoise"
+              checked={tempSettings.brownNoiseEnabled}
+              onCheckedChange={(checked) =>
+                setTempSettings({ ...tempSettings, brownNoiseEnabled: checked })
+              }
+              style={{
+                backgroundColor: tempSettings.brownNoiseEnabled ? phaseColors[phase] : undefined,
+              }}
+            />
+          </div>
         </div>
         <div className="flex justify-end gap-2">
           <Button variant="outline" onClick={() => setOpen(false)}>

@@ -25,12 +25,12 @@ const Index = () => {
 
   // Handle brown noise for work phase
   useEffect(() => {
-    if (timer.isRunning && timer.phase === 'work') {
+    if (timer.isRunning && timer.phase === 'work' && timer.settings.brownNoiseEnabled) {
       playBrownNoise();
     } else {
       stopBrownNoise();
     }
-  }, [timer.isRunning, timer.phase, playBrownNoise, stopBrownNoise]);
+  }, [timer.isRunning, timer.phase, timer.settings.brownNoiseEnabled, playBrownNoise, stopBrownNoise]);
 
   // Register phase change callback for sound effects
   useEffect(() => {
