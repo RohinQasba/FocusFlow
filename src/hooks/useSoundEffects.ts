@@ -2,38 +2,82 @@ import { useEffect, useRef } from 'react';
 import { Phase } from './useTimer';
 
 export const useSoundEffects = () => {
-  const brownNoiseRef = useRef<HTMLAudioElement | null>(null);
-  const phaseTransitionRef = useRef<HTMLAudioElement | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const brownNoiseNodeRef = useRef<AudioBufferSourceNode | null>(null);
+  const gainNodeRef = useRef<GainNode | null>(null);
 
   useEffect(() => {
-    // Create brown noise audio element
-    brownNoiseRef.current = new Audio();
-    brownNoiseRef.current.loop = true;
-    brownNoiseRef.current.volume = 0.15;
+    // Create audio context and brown noise buffer
+    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+    audioContextRef.current = new AudioContextClass();
+    
+    // Create brown noise buffer
+    const bufferSize = audioContextRef.current.sampleRate * 2; // 2 seconds of audio
+    const buffer = audioContextRef.current.createBuffer(1, bufferSize, audioContextRef.current.sampleRate);
+    const output = buffer.getChannelData(0);
+    
+    // Generate brown noise using a simple algorithm
+    let lastOut = 0;
+    for (let i = 0; i < bufferSize; i++) {
+      const white = Math.random() * 2 - 1;
+      output[i] = (lastOut + (0.02 * white)) / 1.02;
+      lastOut = output[i];
+      output[i] *= 3.5; // Adjust volume
+    }
+    
+    // Create gain node for volume control
+    gainNodeRef.current = audioContextRef.current.createGain();
+    gainNodeRef.current.gain.value = 0.15;
+    gainNodeRef.current.connect(audioContextRef.current.destination);
     
     return () => {
-      if (brownNoiseRef.current) {
-        brownNoiseRef.current.pause();
-        brownNoiseRef.current = null;
+      if (brownNoiseNodeRef.current) {
+        brownNoiseNodeRef.current.stop();
+        brownNoiseNodeRef.current.disconnect();
+      }
+      if (gainNodeRef.current) {
+        gainNodeRef.current.disconnect();
+      }
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
       }
     };
   }, []);
 
   const playBrownNoise = () => {
-    if (brownNoiseRef.current) {
-      // Using a simple brown noise generator URL or data URL
-      // For now, we'll use a silent audio as placeholder
-      brownNoiseRef.current.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';
-      brownNoiseRef.current.play().catch(() => {
-        console.log('Brown noise playback prevented by browser');
-      });
+    if (!audioContextRef.current || !gainNodeRef.current) return;
+    
+    // Stop existing noise if playing
+    if (brownNoiseNodeRef.current) {
+      brownNoiseNodeRef.current.stop();
+      brownNoiseNodeRef.current.disconnect();
     }
+    
+    // Create new buffer source and loop it
+    const bufferSize = audioContextRef.current.sampleRate * 2;
+    const buffer = audioContextRef.current.createBuffer(1, bufferSize, audioContextRef.current.sampleRate);
+    const output = buffer.getChannelData(0);
+    
+    let lastOut = 0;
+    for (let i = 0; i < bufferSize; i++) {
+      const white = Math.random() * 2 - 1;
+      output[i] = (lastOut + (0.02 * white)) / 1.02;
+      lastOut = output[i];
+      output[i] *= 3.5;
+    }
+    
+    brownNoiseNodeRef.current = audioContextRef.current.createBufferSource();
+    brownNoiseNodeRef.current.buffer = buffer;
+    brownNoiseNodeRef.current.loop = true;
+    brownNoiseNodeRef.current.connect(gainNodeRef.current);
+    brownNoiseNodeRef.current.start();
   };
 
   const stopBrownNoise = () => {
-    if (brownNoiseRef.current) {
-      brownNoiseRef.current.pause();
-      brownNoiseRef.current.currentTime = 0;
+    if (brownNoiseNodeRef.current) {
+      brownNoiseNodeRef.current.stop();
+      brownNoiseNodeRef.current.disconnect();
+      brownNoiseNodeRef.current = null;
     }
   };
 
