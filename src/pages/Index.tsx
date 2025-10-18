@@ -7,6 +7,8 @@ import { PhaseIndicator } from '@/components/PhaseIndicator';
 import { MotivationalQuote } from '@/components/MotivationalQuote';
 import { SettingsDialog } from '@/components/SettingsDialog';
 import { TimeRange } from '@/components/TimeRange';
+import { Button } from '@/components/ui/button';
+import { Volume2, VolumeX } from 'lucide-react';
 
 const Index = () => {
   const timer = useTimer();
@@ -58,11 +60,25 @@ const Index = () => {
         <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
           FocusFlow
         </h1>
-        <SettingsDialog 
-          settings={timer.settings}
-          onSave={timer.updateSettings}
-          phase={timer.phase}
-        />
+        <div className="flex items-center gap-2">
+          <Button
+            size="icon"
+            variant="ghost"
+            className="rounded-full hover:bg-card transition-colors duration-300"
+            onClick={() => timer.updateSettings({ ...timer.settings, brownNoiseEnabled: !timer.settings.brownNoiseEnabled })}
+          >
+            {timer.settings.brownNoiseEnabled ? (
+              <Volume2 className="h-5 w-5" />
+            ) : (
+              <VolumeX className="h-5 w-5" />
+            )}
+          </Button>
+          <SettingsDialog 
+            settings={timer.settings}
+            onSave={timer.updateSettings}
+            phase={timer.phase}
+          />
+        </div>
       </header>
 
       {/* Main Content */}
