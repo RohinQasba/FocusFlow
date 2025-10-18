@@ -32,8 +32,12 @@ export const useSoundEffects = () => {
     
     return () => {
       if (brownNoiseNodeRef.current) {
-        brownNoiseNodeRef.current.stop();
-        brownNoiseNodeRef.current.disconnect();
+        try {
+          brownNoiseNodeRef.current.stop();
+          brownNoiseNodeRef.current.disconnect();
+        } catch (error) {
+          // Already stopped, ignore
+        }
       }
       if (gainNodeRef.current) {
         gainNodeRef.current.disconnect();
@@ -49,8 +53,12 @@ export const useSoundEffects = () => {
     
     // Stop existing noise if playing
     if (brownNoiseNodeRef.current) {
-      brownNoiseNodeRef.current.stop();
-      brownNoiseNodeRef.current.disconnect();
+      try {
+        brownNoiseNodeRef.current.stop();
+        brownNoiseNodeRef.current.disconnect();
+      } catch (error) {
+        // Already stopped, ignore
+      }
     }
     
     // Create new buffer source and loop it
@@ -75,8 +83,12 @@ export const useSoundEffects = () => {
 
   const stopBrownNoise = () => {
     if (brownNoiseNodeRef.current) {
-      brownNoiseNodeRef.current.stop();
-      brownNoiseNodeRef.current.disconnect();
+      try {
+        brownNoiseNodeRef.current.stop();
+        brownNoiseNodeRef.current.disconnect();
+      } catch (error) {
+        // Already stopped, ignore
+      }
       brownNoiseNodeRef.current = null;
     }
   };
