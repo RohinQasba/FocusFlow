@@ -3,9 +3,10 @@ import { Phase } from '@/hooks/useTimer';
 interface PhaseIndicatorProps {
   phase: Phase;
   workSessionsCompleted: number;
+  totalSessionsBeforeLongBreak: number;
 }
 
-export const PhaseIndicator = ({ phase, workSessionsCompleted }: PhaseIndicatorProps) => {
+export const PhaseIndicator = ({ phase, workSessionsCompleted, totalSessionsBeforeLongBreak }: PhaseIndicatorProps) => {
   const phaseNames = {
     work: 'Focus Time',
     shortBreak: 'Short Break',
@@ -27,13 +28,13 @@ export const PhaseIndicator = ({ phase, workSessionsCompleted }: PhaseIndicatorP
         {phaseNames[phase]}
       </h2>
       <div className="flex items-center justify-center gap-2">
-        {[...Array(4)].map((_, i) => (
+        {[...Array(totalSessionsBeforeLongBreak)].map((_, i) => (
           <div
             key={i}
             className="w-2 h-2 rounded-full transition-all duration-300"
             style={{
-              backgroundColor: i < workSessionsCompleted % 4 ? phaseColors.work : 'hsl(var(--muted))',
-              boxShadow: i < workSessionsCompleted % 4 ? `0 0 8px ${phaseColors.work}` : 'none',
+              backgroundColor: i < workSessionsCompleted % totalSessionsBeforeLongBreak ? phaseColors.work : 'hsl(var(--muted))',
+              boxShadow: i < workSessionsCompleted % totalSessionsBeforeLongBreak ? `0 0 8px ${phaseColors.work}` : 'none',
             }}
           />
         ))}

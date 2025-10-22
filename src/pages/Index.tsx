@@ -86,6 +86,7 @@ const Index = () => {
         <PhaseIndicator 
           phase={timer.phase}
           workSessionsCompleted={timer.workSessionsCompleted}
+          totalSessionsBeforeLongBreak={timer.settings.workSessionsBeforeLongBreak}
         />
 
         <div className="animate-scale-in">

@@ -97,7 +97,10 @@ export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps)
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="sessionsBeforeLongBreak">Work Sessions Before Long Break</Label>
+            <Label htmlFor="sessionsBeforeLongBreak">
+              Work Sessions Before Long Break
+              <span className="text-xs text-muted-foreground ml-1">(work only, excludes breaks)</span>
+            </Label>
             <Input
               id="sessionsBeforeLongBreak"
               type="number"
