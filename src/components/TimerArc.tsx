@@ -54,7 +54,7 @@ export const TimerArc = ({ phase, timeLeft, totalTime }: TimerArcProps) => {
           style={{
             strokeDashoffset,
             transition: 'stroke-dashoffset 1s linear, stroke 0.6s ease-in-out',
-            filter: `drop-shadow(0 0 8px ${phaseColors[phase]})`,
+            filter: `drop-shadow(0 0 16px ${phaseColors[phase]}) drop-shadow(0 0 32px ${phaseColors[phase]}) blur(0.5px)`,
           }}
           r={normalizedRadius}
           cx={radius}
