@@ -28,16 +28,23 @@ export const PhaseIndicator = ({ phase, workSessionsCompleted, totalSessionsBefo
         {phaseNames[phase]}
       </h2>
       <div className="flex items-center justify-center gap-2">
-        {[...Array(totalSessionsBeforeLongBreak)].map((_, i) => (
-          <div
-            key={i}
-            className="w-2 h-2 rounded-full transition-all duration-300"
-            style={{
-              backgroundColor: i < workSessionsCompleted % totalSessionsBeforeLongBreak ? phaseColors.work : 'hsl(var(--muted))',
-              boxShadow: i < workSessionsCompleted % totalSessionsBeforeLongBreak ? `0 0 8px ${phaseColors.work}` : 'none',
-            }}
-          />
-        ))}
+        {[...Array(totalSessionsBeforeLongBreak)].map((_, i) => {
+          const completedSessions = workSessionsCompleted % totalSessionsBeforeLongBreak;
+          const isCompleted = i < completedSessions;
+          const isCurrent = i === completedSessions && phase === 'work';
+          
+          return (
+            <div
+              key={i}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${isCurrent ? 'animate-pulse' : ''}`}
+              style={{
+                backgroundColor: isCompleted ? phaseColors.work : 'transparent',
+                border: isCurrent ? `2px solid ${phaseColors.work}` : `2px solid hsl(var(--muted))`,
+                boxShadow: isCompleted ? `0 0 10px ${phaseColors.work}` : 'none',
+              }}
+            />
+          );
+        })}
       </div>
     </div>
   );
