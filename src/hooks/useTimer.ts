@@ -8,6 +8,7 @@ export interface TimerSettings {
   longBreakDuration: number;
   autoStartNextPhase: boolean;
   brownNoiseEnabled: boolean;
+  workSessionsBeforeLongBreak: number;
 }
 
 const DEFAULT_SETTINGS: TimerSettings = {
@@ -16,6 +17,7 @@ const DEFAULT_SETTINGS: TimerSettings = {
   longBreakDuration: 15,
   autoStartNextPhase: true,
   brownNoiseEnabled: true,
+  workSessionsBeforeLongBreak: 2,
 };
 
 export const useTimer = () => {
@@ -63,10 +65,10 @@ export const useTimer = () => {
   const getNextPhase = useCallback((): Phase => {
     if (phase === 'work') {
       const nextSession = workSessionsCompleted + 1;
-      return nextSession % 4 === 0 ? 'longBreak' : 'shortBreak';
+      return nextSession % settings.workSessionsBeforeLongBreak === 0 ? 'longBreak' : 'shortBreak';
     }
     return 'work';
-  }, [phase, workSessionsCompleted]);
+  }, [phase, workSessionsCompleted, settings.workSessionsBeforeLongBreak]);
 
   const switchPhase = useCallback((newPhase: Phase, autoStart: boolean = false) => {
     setPhase(newPhase);

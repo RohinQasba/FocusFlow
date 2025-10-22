@@ -96,6 +96,20 @@ export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps)
               className="bg-background border-border"
             />
           </div>
+          <div className="grid gap-2">
+            <Label htmlFor="sessionsBeforeLongBreak">Work Sessions Before Long Break</Label>
+            <Input
+              id="sessionsBeforeLongBreak"
+              type="number"
+              min="1"
+              max="10"
+              value={tempSettings.workSessionsBeforeLongBreak}
+              onChange={(e) =>
+                setTempSettings({ ...tempSettings, workSessionsBeforeLongBreak: parseInt(e.target.value) || 2 })
+              }
+              className="bg-background border-border"
+            />
+          </div>
           <div className="flex items-center justify-between">
             <Label htmlFor="autoStart" className="flex-1">
               Auto-start next phase
