@@ -19,9 +19,14 @@ const Index = () => {
   useEffect(() => {
     if (timer.isRunning) {
       const timeout = setTimeout(() => {
-        document.documentElement.classList.add('dark');
+        if (!document.documentElement.classList.contains('dark')) {
+          document.documentElement.classList.add('dark');
+        }
       }, 30000);
       return () => clearTimeout(timeout);
+    } else {
+      // Optionally remove dark mode when timer stops
+      document.documentElement.classList.remove('dark');
     }
   }, [timer.isRunning]);
 

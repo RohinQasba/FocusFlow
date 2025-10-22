@@ -36,11 +36,11 @@ export const PhaseIndicator = ({ phase, workSessionsCompleted, totalSessionsBefo
           return (
             <div
               key={i}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${isCurrent ? 'animate-pulse' : ''}`}
+              className="w-3 h-3 rounded-full transition-all duration-300"
               style={{
                 backgroundColor: isCompleted ? phaseColors.work : 'transparent',
                 border: isCurrent ? `2px solid ${phaseColors.work}` : `2px solid hsl(var(--muted))`,
-                boxShadow: isCompleted ? `0 0 10px ${phaseColors.work}` : 'none',
+                boxShadow: isCompleted ? `0 0 10px ${phaseColors.work}` : isCurrent ? `0 0 6px ${phaseColors.work}` : 'none',
               }}
             />
           );
