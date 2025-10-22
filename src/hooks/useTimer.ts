@@ -71,13 +71,14 @@ export const useTimer = () => {
   }, [phase, workSessionsCompleted, settings.workSessionsBeforeLongBreak]);
 
   const switchPhase = useCallback((newPhase: Phase, autoStart: boolean = false) => {
+    // Increment work sessions when work phase COMPLETES
+    if (phase === 'work' && newPhase !== 'work') {
+      setWorkSessionsCompleted(prev => prev + 1);
+    }
+
     setPhase(newPhase);
     const duration = getDuration(newPhase);
     setTimeLeft(duration * 60);
-    
-    if (newPhase === 'work' && phase !== 'work') {
-      setWorkSessionsCompleted(prev => prev + 1);
-    }
 
     if (onPhaseChangeRef.current) {
       onPhaseChangeRef.current(newPhase);
@@ -106,9 +107,11 @@ export const useTimer = () => {
   const reset = useCallback(() => {
     setIsRunning(false);
     setStartTime(null);
-    const duration = getDuration(phase);
+    setWorkSessionsCompleted(0);
+    setPhase('work');
+    const duration = settings.workDuration;
     setTimeLeft(duration * 60);
-  }, [phase, getDuration]);
+  }, [settings.workDuration]);
 
   const skip = useCallback(() => {
     const nextPhase = getNextPhase();

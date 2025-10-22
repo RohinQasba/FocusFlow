@@ -7,6 +7,7 @@ import { PhaseIndicator } from '@/components/PhaseIndicator';
 import { MotivationalQuote } from '@/components/MotivationalQuote';
 import { SettingsDialog } from '@/components/SettingsDialog';
 import { TimeRange } from '@/components/TimeRange';
+import { VictoryScreen } from '@/components/VictoryScreen';
 import { Button } from '@/components/ui/button';
 import { Volume2, VolumeX } from 'lucide-react';
 
@@ -14,6 +15,10 @@ const Index = () => {
   const timer = useTimer();
   const { playBrownNoise, stopBrownNoise, playPhaseTransition } = useSoundEffects();
   const [, setForceUpdate] = useState(0);
+  const [showVictory, setShowVictory] = useState(false);
+
+  // Check if all sessions are completed
+  const allSessionsComplete = timer.workSessionsCompleted >= timer.settings.workSessionsBeforeLongBreak && timer.phase !== 'work' && !timer.isRunning;
 
   // Auto dark mode after 30 seconds
   useEffect(() => {
@@ -47,6 +52,18 @@ const Index = () => {
     });
   }, [timer, playPhaseTransition]);
 
+  // Show victory screen when all sessions complete
+  useEffect(() => {
+    if (allSessionsComplete) {
+      setShowVictory(true);
+    }
+  }, [allSessionsComplete]);
+
+  const handleRestart = () => {
+    setShowVictory(false);
+    timer.reset();
+  };
+
   const phaseColors = {
     work: 'hsl(var(--work))',
     shortBreak: 'hsl(var(--short-break))',
@@ -54,12 +71,20 @@ const Index = () => {
   };
 
   return (
-    <div 
-      className="min-h-screen flex flex-col items-center justify-center p-4 transition-all duration-[1500ms] ease-in-out"
-      style={{
-        background: `linear-gradient(135deg, hsl(var(--background)) 0%, ${phaseColors[timer.phase]}15 100%)`,
-      }}
-    >
+    <>
+      {showVictory && (
+        <VictoryScreen 
+          totalSessions={timer.settings.workSessionsBeforeLongBreak}
+          onRestart={handleRestart}
+        />
+      )}
+
+      <div 
+        className="min-h-screen flex flex-col items-center justify-center p-4 transition-all duration-[1500ms] ease-in-out"
+        style={{
+          background: `linear-gradient(135deg, hsl(var(--background)) 0%, ${phaseColors[timer.phase]}15 100%)`,
+        }}
+      >
       {/* Header */}
       <header className="absolute top-6 left-0 right-0 flex items-center justify-between px-6 max-w-5xl mx-auto">
         <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
@@ -123,11 +148,12 @@ const Index = () => {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="absolute bottom-6 text-center text-muted-foreground text-sm">
-        <p>Built with focus and flow</p>
-      </footer>
-    </div>
+        {/* Footer */}
+        <footer className="absolute bottom-6 text-center text-muted-foreground text-sm">
+          <p>Built with focus and flow</p>
+        </footer>
+      </div>
+    </>
   );
 };
 
