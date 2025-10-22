@@ -7,28 +7,8 @@ export const useSoundEffects = () => {
   const gainNodeRef = useRef<GainNode | null>(null);
 
   useEffect(() => {
-    // Create audio context and brown noise buffer
-    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-    audioContextRef.current = new AudioContextClass();
-    
-    // Create brown noise buffer
-    const bufferSize = audioContextRef.current.sampleRate * 2; // 2 seconds of audio
-    const buffer = audioContextRef.current.createBuffer(1, bufferSize, audioContextRef.current.sampleRate);
-    const output = buffer.getChannelData(0);
-    
-    // Generate brown noise using a simple algorithm
-    let lastOut = 0;
-    for (let i = 0; i < bufferSize; i++) {
-      const white = Math.random() * 2 - 1;
-      output[i] = (lastOut + (0.02 * white)) / 1.02;
-      lastOut = output[i];
-      output[i] *= 3.5; // Adjust volume
-    }
-    
-    // Create gain node for volume control
-    gainNodeRef.current = audioContextRef.current.createGain();
-    gainNodeRef.current.gain.value = 0.15;
-    gainNodeRef.current.connect(audioContextRef.current.destination);
+    // Lazily initialize AudioContext on user gesture to satisfy autoplay policies
+    // Initialization happens in ensureAudioContext(); we only clean up below if created.
     
     return () => {
       if (brownNoiseNodeRef.current) {
@@ -48,9 +28,27 @@ export const useSoundEffects = () => {
     };
   }, []);
 
-  const playBrownNoise = () => {
+  // Ensure AudioContext is created and resumed on user gesture
+  const ensureAudioContext = async () => {
+    if (!audioContextRef.current) {
+      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+      audioContextRef.current = new AudioContextClass();
+    }
+    if (audioContextRef.current.state === 'suspended') {
+      try { await audioContextRef.current.resume(); } catch {}
+    }
+    if (!gainNodeRef.current) {
+      gainNodeRef.current = audioContextRef.current.createGain();
+      // start muted; we'll fade in when starting noise
+      gainNodeRef.current.gain.value = 0;
+      gainNodeRef.current.connect(audioContextRef.current.destination);
+    }
+  };
+
+  const playBrownNoise = async () => {
+    await ensureAudioContext();
     if (!audioContextRef.current || !gainNodeRef.current) return;
-    
+  
     // Stop existing noise if playing
     if (brownNoiseNodeRef.current) {
       try {
@@ -65,26 +63,37 @@ export const useSoundEffects = () => {
     const bufferSize = audioContextRef.current.sampleRate * 2;
     const buffer = audioContextRef.current.createBuffer(1, bufferSize, audioContextRef.current.sampleRate);
     const output = buffer.getChannelData(0);
-    
+
     let lastOut = 0;
     for (let i = 0; i < bufferSize; i++) {
       const white = Math.random() * 2 - 1;
-      output[i] = (lastOut + (0.02 * white)) / 1.02;
+      output[i] = (lastOut + 0.02 * white) / 1.02;
       lastOut = output[i];
       output[i] *= 3.5;
     }
-    
+
     brownNoiseNodeRef.current = audioContextRef.current.createBufferSource();
     brownNoiseNodeRef.current.buffer = buffer;
     brownNoiseNodeRef.current.loop = true;
     brownNoiseNodeRef.current.connect(gainNodeRef.current);
+
+    const now = audioContextRef.current.currentTime;
+    gainNodeRef.current.gain.cancelScheduledValues(now);
+    gainNodeRef.current.gain.setValueAtTime(0, now);
+    gainNodeRef.current.gain.linearRampToValueAtTime(0.15, now + 0.5);
+
     brownNoiseNodeRef.current.start();
   };
 
   const stopBrownNoise = () => {
-    if (brownNoiseNodeRef.current) {
+    if (brownNoiseNodeRef.current && audioContextRef.current && gainNodeRef.current) {
+      const now = audioContextRef.current.currentTime;
       try {
-        brownNoiseNodeRef.current.stop();
+        // Smooth fade-out then stop
+        gainNodeRef.current.gain.cancelScheduledValues(now);
+        gainNodeRef.current.gain.setValueAtTime(gainNodeRef.current.gain.value, now);
+        gainNodeRef.current.gain.linearRampToValueAtTime(0, now + 0.3);
+        brownNoiseNodeRef.current.stop(now + 0.35);
         brownNoiseNodeRef.current.disconnect();
       } catch (error) {
         // Already stopped, ignore
