@@ -33,32 +33,45 @@ const Index = () => {
 
   // Auto dark mode after 10 seconds
   useEffect(() => {
-    if (timer.isRunning && timer.settings.autoDarkMode) {
+    const autoDarkEnabled = timer.settings.autoDarkMode !== false; // Default to true if not set
+    
+    if (timer.isRunning && autoDarkEnabled) {
+      console.log('Starting dark mode timer - will activate in 10 seconds');
       const timeout = setTimeout(() => {
-        if (!document.documentElement.classList.contains('dark')) {
-          document.documentElement.classList.add('dark');
-        }
+        console.log('Activating dark mode now');
+        document.documentElement.classList.add('dark');
       }, 10000);
-      return () => clearTimeout(timeout);
+      return () => {
+        console.log('Cleaning up dark mode timer');
+        clearTimeout(timeout);
+      };
     } else {
       // Remove dark mode when timer stops
+      console.log('Removing dark mode');
       document.documentElement.classList.remove('dark');
     }
   }, [timer.isRunning, timer.settings.autoDarkMode]);
 
   // Screen dimming effect
   useEffect(() => {
-    if (timer.isRunning && timer.settings.screenDimming && timer.settings.autoDarkMode) {
+    const autoDarkEnabled = timer.settings.autoDarkMode !== false;
+    const dimmingEnabled = timer.settings.screenDimming !== false;
+    
+    if (timer.isRunning && dimmingEnabled && autoDarkEnabled) {
+      console.log('Starting dimming timer - will dim in 10 seconds');
       const timeout = setTimeout(() => {
+        console.log('Dimming screen now');
         document.body.style.filter = 'brightness(0.4)';
         document.body.style.transition = 'filter 1s ease-in-out';
       }, 10000);
       return () => {
         clearTimeout(timeout);
         document.body.style.filter = '';
+        document.body.style.transition = '';
       };
     } else {
       document.body.style.filter = '';
+      document.body.style.transition = '';
     }
   }, [timer.isRunning, timer.settings.screenDimming, timer.settings.autoDarkMode]);
 
@@ -116,27 +129,27 @@ const Index = () => {
       )}
 
       <div 
-        className="min-h-screen flex flex-col items-center justify-center p-4 transition-all duration-[1500ms] ease-in-out"
+        className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 transition-all duration-[1500ms] ease-in-out"
         style={{
           background: `linear-gradient(135deg, hsl(var(--background)) 0%, ${phaseColors[timer.phase]}15 100%)`,
         }}
       >
       {/* Header */}
-      <header className="absolute top-6 left-0 right-0 flex items-center justify-between px-6 max-w-5xl mx-auto">
-        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+      <header className="absolute top-4 sm:top-6 left-0 right-0 flex items-center justify-between px-4 sm:px-6 max-w-5xl mx-auto">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
           FocusFlow
         </h1>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           <Button
             size="icon"
             variant="ghost"
-            className="rounded-full hover:bg-card transition-colors duration-300"
+            className="rounded-full hover:bg-card transition-colors duration-300 h-9 w-9 sm:h-10 sm:w-10"
             onClick={() => timer.updateSettings({ ...timer.settings, brownNoiseEnabled: !timer.settings.brownNoiseEnabled })}
           >
             {timer.settings.brownNoiseEnabled ? (
-              <Volume2 className="h-5 w-5" />
+              <Volume2 className="h-4 w-4 sm:h-5 sm:w-5" />
             ) : (
-              <VolumeX className="h-5 w-5" />
+              <VolumeX className="h-4 w-4 sm:h-5 sm:w-5" />
             )}
           </Button>
           
@@ -145,9 +158,9 @@ const Index = () => {
               <Button
                 size="icon"
                 variant="ghost"
-                className="rounded-full hover:bg-card transition-colors duration-300"
+                className="rounded-full hover:bg-card transition-colors duration-300 h-9 w-9 sm:h-10 sm:w-10"
               >
-                <RotateCcw className="h-5 w-5" />
+                <RotateCcw className="h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
@@ -175,14 +188,14 @@ const Index = () => {
       </header>
 
       {/* Main Content */}
-      <main className="flex flex-col items-center justify-center gap-8 max-w-2xl w-full">
+      <main className="flex flex-col items-center justify-center gap-4 sm:gap-6 md:gap-8 max-w-2xl w-full mt-16 sm:mt-0">
         <PhaseIndicator 
           phase={timer.phase}
           workSessionsCompleted={timer.workSessionsCompleted}
           totalSessionsBeforeLongBreak={timer.settings.workSessionsBeforeLongBreak}
         />
 
-        <div className="animate-scale-in">
+        <div className="animate-scale-in scale-75 sm:scale-90 md:scale-100">
           <TimerArc
             phase={timer.phase}
             timeLeft={timer.timeLeft}
@@ -203,7 +216,7 @@ const Index = () => {
           onReset={timer.reset}
         />
 
-        <div className="mt-8">
+        <div className="mt-4 sm:mt-6 md:mt-8 px-4 sm:px-0">
           <MotivationalQuote 
             phase={timer.phase}
             workSessionsCompleted={timer.workSessionsCompleted}
@@ -212,7 +225,7 @@ const Index = () => {
       </main>
 
         {/* Footer */}
-        <footer className="absolute bottom-6 text-center text-muted-foreground text-sm">
+        <footer className="absolute bottom-4 sm:bottom-6 text-center text-muted-foreground text-xs sm:text-sm">
           <p>Built with focus and flow</p>
         </footer>
       </div>
