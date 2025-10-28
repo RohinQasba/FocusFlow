@@ -31,7 +31,7 @@ export const TimerControls = ({
         className="relative group transition-all duration-300"
         style={{
           backgroundColor: `hsl(var(--${phaseColors[phase]}))`,
-          color: 'white',
+          color: 'black',
           boxShadow: `0 0 20px hsl(var(--${phaseColors[phase]}) / 0.5)`,
         }}
       >
@@ -42,7 +42,7 @@ export const TimerControls = ({
           </>
         ) : (
           <>
-            <Play className="mr-2 h-5 w-5 fill-white" />
+            <Play className="mr-2 h-5 w-5 fill-black" />
             Start
           </>
         )}
