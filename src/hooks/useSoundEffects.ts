@@ -1,104 +1,83 @@
 import { useEffect, useRef } from 'react';
 import { Phase } from './useTimer';
 
+declare global {
+  interface Window {
+    YT: any;
+    onYouTubeIframeAPIReady: () => void;
+  }
+}
+
 export const useSoundEffects = () => {
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const brownNoiseNodeRef = useRef<AudioBufferSourceNode | null>(null);
-  const gainNodeRef = useRef<GainNode | null>(null);
+  const playerRef = useRef<any>(null);
+  const isPlayerReadyRef = useRef(false);
 
   useEffect(() => {
-    // Lazily initialize AudioContext on user gesture to satisfy autoplay policies
-    // Initialization happens in ensureAudioContext(); we only clean up below if created.
-    
+    // Load YouTube IFrame API
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+
+    // Create hidden iframe container
+    const container = document.createElement('div');
+    container.id = 'youtube-brown-noise';
+    container.style.position = 'fixed';
+    container.style.top = '-9999px';
+    container.style.left = '-9999px';
+    container.style.width = '1px';
+    container.style.height = '1px';
+    container.style.opacity = '0';
+    container.style.pointerEvents = 'none';
+    document.body.appendChild(container);
+
+    // Initialize player when API is ready
+    window.onYouTubeIframeAPIReady = () => {
+      playerRef.current = new window.YT.Player('youtube-brown-noise', {
+        height: '1',
+        width: '1',
+        videoId: 'ca3fBRmmrBA',
+        playerVars: {
+          autoplay: 0,
+          controls: 0,
+          loop: 1,
+          playlist: 'ca3fBRmmrBA',
+        },
+        events: {
+          onReady: () => {
+            isPlayerReadyRef.current = true;
+            playerRef.current.setVolume(25);
+          },
+        },
+      });
+    };
+
     return () => {
-      if (brownNoiseNodeRef.current) {
-        try {
-          brownNoiseNodeRef.current.stop();
-          brownNoiseNodeRef.current.disconnect();
-        } catch (error) {
-          // Already stopped, ignore
-        }
+      if (playerRef.current && playerRef.current.destroy) {
+        playerRef.current.destroy();
       }
-      if (gainNodeRef.current) {
-        gainNodeRef.current.disconnect();
-      }
-      if (audioContextRef.current) {
-        audioContextRef.current.close();
-      }
+      const el = document.getElementById('youtube-brown-noise');
+      if (el) el.remove();
     };
   }, []);
 
-  // Ensure AudioContext is created and resumed on user gesture
-  const ensureAudioContext = async () => {
-    if (!audioContextRef.current) {
-      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-      audioContextRef.current = new AudioContextClass();
-    }
-    if (audioContextRef.current.state === 'suspended') {
-      try { await audioContextRef.current.resume(); } catch {}
-    }
-    if (!gainNodeRef.current) {
-      gainNodeRef.current = audioContextRef.current.createGain();
-      // start muted; we'll fade in when starting noise
-      gainNodeRef.current.gain.value = 0;
-      gainNodeRef.current.connect(audioContextRef.current.destination);
-    }
-  };
-
   const playBrownNoise = async () => {
-    await ensureAudioContext();
-    if (!audioContextRef.current || !gainNodeRef.current) return;
-  
-    // Stop existing noise if playing
-    if (brownNoiseNodeRef.current) {
+    if (playerRef.current && isPlayerReadyRef.current) {
       try {
-        brownNoiseNodeRef.current.stop();
-        brownNoiseNodeRef.current.disconnect();
+        await playerRef.current.playVideo();
       } catch (error) {
-        // Already stopped, ignore
+        console.log('Failed to play brown noise:', error);
       }
     }
-    
-    // Create new buffer source and loop it
-    const bufferSize = audioContextRef.current.sampleRate * 2;
-    const buffer = audioContextRef.current.createBuffer(1, bufferSize, audioContextRef.current.sampleRate);
-    const output = buffer.getChannelData(0);
-
-    let lastOut = 0;
-    for (let i = 0; i < bufferSize; i++) {
-      const white = Math.random() * 2 - 1;
-      output[i] = (lastOut + 0.02 * white) / 1.02;
-      lastOut = output[i];
-      output[i] *= 3.5;
-    }
-
-    brownNoiseNodeRef.current = audioContextRef.current.createBufferSource();
-    brownNoiseNodeRef.current.buffer = buffer;
-    brownNoiseNodeRef.current.loop = true;
-    brownNoiseNodeRef.current.connect(gainNodeRef.current);
-
-    const now = audioContextRef.current.currentTime;
-    gainNodeRef.current.gain.cancelScheduledValues(now);
-    gainNodeRef.current.gain.setValueAtTime(0, now);
-    gainNodeRef.current.gain.linearRampToValueAtTime(0.15, now + 0.5);
-
-    brownNoiseNodeRef.current.start();
   };
 
   const stopBrownNoise = () => {
-    if (brownNoiseNodeRef.current && audioContextRef.current && gainNodeRef.current) {
-      const now = audioContextRef.current.currentTime;
+    if (playerRef.current && isPlayerReadyRef.current) {
       try {
-        // Smooth fade-out then stop
-        gainNodeRef.current.gain.cancelScheduledValues(now);
-        gainNodeRef.current.gain.setValueAtTime(gainNodeRef.current.gain.value, now);
-        gainNodeRef.current.gain.linearRampToValueAtTime(0, now + 0.3);
-        brownNoiseNodeRef.current.stop(now + 0.35);
-        brownNoiseNodeRef.current.disconnect();
+        playerRef.current.pauseVideo();
       } catch (error) {
-        // Already stopped, ignore
+        console.log('Failed to stop brown noise:', error);
       }
-      brownNoiseNodeRef.current = null;
     }
   };
 
