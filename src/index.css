@@ -52,33 +52,41 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 220 30% 8%;
-    --foreground: 0 0% 98%;
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
 
-    --card: 220 25% 12%;
-    --card-foreground: 0 0% 98%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 220 25% 12%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 349 100% 55%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
 
-    --secondary: 220 20% 15%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 220 15% 20%;
+    --muted: 0 0% 20%;
     --muted-foreground: 0 0% 70%;
 
-    --accent: 349 100% 55%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 0 0% 100%;
+    --accent-foreground: 0 0% 0%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 0% 30%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 15% 20%;
-    --input: 220 15% 20%;
-    --ring: 349 100% 55%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 0% 100%;
+
+    /* Phase colors in dark mode - white for visibility */
+    --work: 0 0% 100%;
+    --work-glow: 0 0% 100%;
+    --short-break: 0 0% 100%;
+    --short-break-glow: 0 0% 100%;
+    --long-break: 0 0% 100%;
+    --long-break-glow: 0 0% 100%;
   }
 }
 

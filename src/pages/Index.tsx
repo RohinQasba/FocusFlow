@@ -31,20 +31,36 @@ const Index = () => {
   // Check if all sessions are completed
   const allSessionsComplete = timer.workSessionsCompleted >= timer.settings.workSessionsBeforeLongBreak && timer.phase !== 'work' && !timer.isRunning;
 
-  // Auto dark mode after 30 seconds
+  // Auto dark mode after 10 seconds
   useEffect(() => {
-    if (timer.isRunning) {
+    if (timer.isRunning && timer.settings.autoDarkMode) {
       const timeout = setTimeout(() => {
         if (!document.documentElement.classList.contains('dark')) {
           document.documentElement.classList.add('dark');
         }
-      }, 30000);
+      }, 10000);
       return () => clearTimeout(timeout);
     } else {
-      // Optionally remove dark mode when timer stops
+      // Remove dark mode when timer stops
       document.documentElement.classList.remove('dark');
     }
-  }, [timer.isRunning]);
+  }, [timer.isRunning, timer.settings.autoDarkMode]);
+
+  // Screen dimming effect
+  useEffect(() => {
+    if (timer.isRunning && timer.settings.screenDimming && timer.settings.autoDarkMode) {
+      const timeout = setTimeout(() => {
+        document.body.style.filter = 'brightness(0.4)';
+        document.body.style.transition = 'filter 1s ease-in-out';
+      }, 10000);
+      return () => {
+        clearTimeout(timeout);
+        document.body.style.filter = '';
+      };
+    } else {
+      document.body.style.filter = '';
+    }
+  }, [timer.isRunning, timer.settings.screenDimming, timer.settings.autoDarkMode]);
 
   // Handle brown noise for work phase
   useEffect(() => {

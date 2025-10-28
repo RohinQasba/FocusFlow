@@ -143,6 +143,36 @@ export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps)
               }}
             />
           </div>
+          <div className="flex items-center justify-between">
+            <Label htmlFor="autoDarkMode" className="flex-1">
+              Auto Dark Mode (after 10s)
+            </Label>
+            <Switch
+              id="autoDarkMode"
+              checked={tempSettings.autoDarkMode}
+              onCheckedChange={(checked) =>
+                setTempSettings({ ...tempSettings, autoDarkMode: checked })
+              }
+              style={{
+                backgroundColor: tempSettings.autoDarkMode ? phaseColors[phase] : undefined,
+              }}
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label htmlFor="screenDimming" className="flex-1">
+              Screen Dimming (Battery Saver)
+            </Label>
+            <Switch
+              id="screenDimming"
+              checked={tempSettings.screenDimming}
+              onCheckedChange={(checked) =>
+                setTempSettings({ ...tempSettings, screenDimming: checked })
+              }
+              style={{
+                backgroundColor: tempSettings.screenDimming ? phaseColors[phase] : undefined,
+              }}
+            />
+          </div>
         </div>
         <div className="flex justify-end gap-2">
           <Button variant="outline" onClick={() => setOpen(false)}>

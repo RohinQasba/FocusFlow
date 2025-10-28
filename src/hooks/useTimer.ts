@@ -9,6 +9,8 @@ export interface TimerSettings {
   autoStartNextPhase: boolean;
   brownNoiseEnabled: boolean;
   workSessionsBeforeLongBreak: number;
+  autoDarkMode: boolean;
+  screenDimming: boolean;
 }
 
 const DEFAULT_SETTINGS: TimerSettings = {
@@ -18,6 +20,8 @@ const DEFAULT_SETTINGS: TimerSettings = {
   autoStartNextPhase: true,
   brownNoiseEnabled: true,
   workSessionsBeforeLongBreak: 2,
+  autoDarkMode: true,
+  screenDimming: true,
 };
 
 export const useTimer = () => {
