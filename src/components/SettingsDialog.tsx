@@ -63,14 +63,17 @@ export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps)
           <Settings className="h-5 w-5" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] bg-card border-border max-h-[85vh] flex flex-col">
+      <DialogContent 
+        className="sm:max-w-[425px] bg-card border-border max-h-[85vh] flex flex-col"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle className="text-2xl">Settings</DialogTitle>
           <DialogDescription>
             Customize your Pomodoro timer preferences
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="flex-1 pr-4 -mr-4" style={{ maxHeight: 'calc(85vh - 180px)' }}>
+        <ScrollArea className="flex-1 h-full">
           <div className="grid gap-6 py-4 pr-4">
             <div className="grid gap-2">
               <Label htmlFor="work">Work Duration (minutes)</Label>
