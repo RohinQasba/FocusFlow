@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useTimer } from '@/hooks/useTimer';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { TimerArc } from '@/components/TimerArc';
@@ -42,6 +42,8 @@ const Index = () => {
   }, [timer.isRunning, timer.settings.autoDarkMode]);
 
   // Screen dimming effect
+  const [isDimmed, setIsDimmed] = useState(false);
+
   useEffect(() => {
     const autoDarkEnabled = timer.settings.autoDarkMode !== false;
     const dimmingEnabled = timer.settings.screenDimming !== false;
@@ -52,17 +54,30 @@ const Index = () => {
         console.log('Dimming screen now');
         document.body.style.filter = 'brightness(0.4)';
         document.body.style.transition = 'filter 1s ease-in-out';
+        setIsDimmed(true);
       }, 10000);
       return () => {
         clearTimeout(timeout);
-        document.body.style.filter = '';
-        document.body.style.transition = '';
+        if (!isDimmed) {
+          document.body.style.filter = '';
+          document.body.style.transition = '';
+        }
       };
-    } else {
+    } else if (!timer.isRunning) {
       document.body.style.filter = '';
       document.body.style.transition = '';
+      setIsDimmed(false);
     }
-  }, [timer.isRunning, timer.settings.screenDimming, timer.settings.autoDarkMode]);
+  }, [timer.isRunning, timer.settings.screenDimming, timer.settings.autoDarkMode, isDimmed]);
+
+  // Handle click to restore brightness (but keep dark mode)
+  const handleScreenClick = useCallback(() => {
+    if (isDimmed && timer.isRunning) {
+      console.log('Restoring brightness on click');
+      document.body.style.filter = '';
+      setIsDimmed(false);
+    }
+  }, [isDimmed, timer.isRunning]);
 
   // Handle brown noise for work phase
   useEffect(() => {
@@ -121,6 +136,7 @@ const Index = () => {
         style={{
           background: `linear-gradient(135deg, hsl(var(--background)) 0%, ${phaseColors[timer.phase]}15 100%)`,
         }}
+        onClick={handleScreenClick}
       >
       {/* Header */}
       <header className="absolute top-4 sm:top-6 left-0 right-0 flex items-center justify-between px-4 sm:px-6 max-w-5xl mx-auto">
