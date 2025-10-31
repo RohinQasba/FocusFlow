@@ -73,7 +73,7 @@ export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps)
             Customize your Pomodoro timer preferences
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="flex-1 h-full pr-2">
+        <ScrollArea className="flex-1 h-[65vh] pr-2 overflow-y-auto">
           <div className="grid gap-6 py-4 pr-4">
             <div className="grid gap-2">
               <Label htmlFor="work">Work Duration (minutes)</Label>
