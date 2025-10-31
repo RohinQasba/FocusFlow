@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Play, Pause, RotateCcw } from 'lucide-react';
+import { Play, Pause } from 'lucide-react';
 import { Phase } from '@/hooks/useTimer';
 
 interface TimerControlsProps {
@@ -7,15 +7,13 @@ interface TimerControlsProps {
   phase: Phase;
   onStart: () => void;
   onPause: () => void;
-  onReset: () => void;
 }
 
 export const TimerControls = ({ 
   isRunning, 
   phase, 
   onStart, 
-  onPause, 
-  onReset 
+  onPause
 }: TimerControlsProps) => {
   const phaseColors = {
     work: 'work',
@@ -52,16 +50,6 @@ export const TimerControls = ({
             boxShadow: `0 0 30px hsl(var(--${phaseColors[phase]}) / 0.8), 0 0 60px hsl(var(--${phaseColors[phase]}) / 0.4)`,
           }}
         />
-      </Button>
-
-      <Button
-        size="lg"
-        variant="outline"
-        onClick={onReset}
-        className="border-muted-foreground/30 hover:border-foreground/50 hover:bg-card transition-all duration-300"
-      >
-        <RotateCcw className="mr-2 h-5 w-5" />
-        Reset
       </Button>
     </div>
   );

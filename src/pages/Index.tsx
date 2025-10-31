@@ -9,18 +9,7 @@ import { SettingsDialog } from '@/components/SettingsDialog';
 import { TimeRange } from '@/components/TimeRange';
 import { VictoryScreen } from '@/components/VictoryScreen';
 import { Button } from '@/components/ui/button';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Volume2, VolumeX, RotateCcw } from 'lucide-react';
+import { Volume2, VolumeX, Maximize } from 'lucide-react';
 
 const Index = () => {
   const timer = useTimer();
@@ -104,13 +93,12 @@ const Index = () => {
     timer.reset();
   };
 
-  const handleCompleteReset = () => {
-    // Clear all localStorage
-    localStorage.clear();
-    // Reset all state
-    setShowVictory(false);
-    // Reload the page to get fresh default settings
-    window.location.reload();
+  const handleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
   };
 
   const phaseColors = {
@@ -153,31 +141,14 @@ const Index = () => {
             )}
           </Button>
           
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button
-                size="icon"
-                variant="ghost"
-                className="rounded-full hover:bg-card transition-colors duration-300 h-9 w-9 sm:h-10 sm:w-10"
-              >
-                <RotateCcw className="h-4 w-4 sm:h-5 sm:w-5" />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Reset Everything?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This will clear all your settings, progress, and stored data. This action cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handleCompleteReset}>
-                  Yes, reset everything
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <Button
+            size="icon"
+            variant="ghost"
+            className="rounded-full hover:bg-card transition-colors duration-300 h-9 w-9 sm:h-10 sm:w-10"
+            onClick={handleFullscreen}
+          >
+            <Maximize className="h-4 w-4 sm:h-5 sm:w-5" />
+          </Button>
 
           <SettingsDialog 
             settings={timer.settings}
@@ -213,7 +184,6 @@ const Index = () => {
           phase={timer.phase}
           onStart={timer.start}
           onPause={timer.pause}
-          onReset={timer.reset}
         />
 
         <div className="mt-4 sm:mt-6 md:mt-8 px-4 sm:px-0">

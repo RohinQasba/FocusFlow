@@ -7,12 +7,23 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
-import { Settings } from 'lucide-react';
+import { Settings, RotateCcw } from 'lucide-react';
 import { TimerSettings } from '@/hooks/useTimer';
 
 interface SettingsDialogProps {
@@ -28,6 +39,11 @@ export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps)
   const handleSave = () => {
     onSave(tempSettings);
     setOpen(false);
+  };
+
+  const handleCompleteReset = () => {
+    localStorage.clear();
+    window.location.reload();
   };
 
   const phaseColors = {
@@ -47,15 +63,15 @@ export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps)
           <Settings className="h-5 w-5" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] bg-card border-border max-h-[90vh] flex flex-col">
+      <DialogContent className="sm:max-w-[425px] bg-card border-border max-h-[85vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="text-2xl">Settings</DialogTitle>
           <DialogDescription>
             Customize your Pomodoro timer preferences
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="flex-1 pr-4">
-          <div className="grid gap-6 py-4">
+        <ScrollArea className="flex-1 pr-4 -mr-4" style={{ maxHeight: 'calc(85vh - 180px)' }}>
+          <div className="grid gap-6 py-4 pr-4">
             <div className="grid gap-2">
               <Label htmlFor="work">Work Duration (minutes)</Label>
               <Input
@@ -175,9 +191,37 @@ export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps)
                 }}
               />
             </div>
+            
+            <div className="pt-4 border-t">
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="destructive"
+                    className="w-full"
+                  >
+                    <RotateCcw className="mr-2 h-4 w-4" />
+                    Reset Everything
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Reset Everything?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This will clear all your settings, progress, and stored data. This action cannot be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleCompleteReset}>
+                      Yes, reset everything
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
           </div>
         </ScrollArea>
-        <div className="flex justify-end gap-2 pt-4 border-t">
+        <div className="flex justify-end gap-2 pt-4 border-t border-border">
           <Button variant="outline" onClick={() => setOpen(false)}>
             Cancel
           </Button>
