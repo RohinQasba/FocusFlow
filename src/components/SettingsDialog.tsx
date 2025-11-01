@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { CSSProperties } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -74,10 +75,10 @@ export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps)
           </DialogDescription>
         </DialogHeader>
         <ScrollArea 
-          className="flex-1 h-[65vh] pr-2 overflow-y-auto"
+          className="flex-1 h-[65vh] pr-2"
           style={{
-            '--scrollbar-thumb': phaseColors[phase],
-          } as React.CSSProperties}
+            ['--scrollbar-thumb' as any]: phaseColors[phase],
+          } as CSSProperties}
         >
           <div className="grid gap-6 py-4 pr-4">
             <div className="grid gap-2">
