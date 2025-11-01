@@ -230,9 +230,12 @@ export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps)
           </Button>
           <Button 
             onClick={handleSave}
+            className="font-semibold"
             style={{
               backgroundColor: phaseColors[phase],
-              color: 'white',
+              color: 'black',
+              textShadow: '0 1px 2px rgba(255, 255, 255, 0.3)',
+              boxShadow: `0 0 15px ${phaseColors[phase]}66, 0 2px 8px rgba(0, 0, 0, 0.1)`,
             }}
           >
             Save Changes

@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Play, Pause } from 'lucide-react';
+import { Play, Pause, RotateCcw } from 'lucide-react';
 import { Phase } from '@/hooks/useTimer';
 
 interface TimerControlsProps {
@@ -7,13 +7,15 @@ interface TimerControlsProps {
   phase: Phase;
   onStart: () => void;
   onPause: () => void;
+  onReset: () => void;
 }
 
 export const TimerControls = ({ 
   isRunning, 
   phase, 
   onStart, 
-  onPause
+  onPause,
+  onReset
 }: TimerControlsProps) => {
   const phaseColors = {
     work: 'work',
@@ -51,6 +53,15 @@ export const TimerControls = ({
             boxShadow: `0 0 25px hsl(var(--${phaseColors[phase]}) / 0.6), 0 0 50px hsl(var(--${phaseColors[phase]}) / 0.3)`,
           }}
         />
+      </Button>
+      
+      <Button
+        size="icon"
+        onClick={onReset}
+        variant="outline"
+        className="relative group transition-all duration-300 h-11 w-11"
+      >
+        <RotateCcw className="h-5 w-5" />
       </Button>
     </div>
   );

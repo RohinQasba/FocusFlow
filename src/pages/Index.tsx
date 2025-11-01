@@ -200,6 +200,7 @@ const Index = () => {
           phase={timer.phase}
           onStart={timer.start}
           onPause={timer.pause}
+          onReset={timer.reset}
         />
 
         <div className="mt-4 sm:mt-6 md:mt-8 px-4 sm:px-0">
