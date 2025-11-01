@@ -175,7 +175,7 @@ const Index = () => {
       </header>
 
       {/* Main Content */}
-      <main className="flex flex-col items-center justify-center gap-4 sm:gap-6 md:gap-8 max-w-2xl w-full mt-16 sm:mt-0">
+      <main className="flex flex-col items-center justify-center gap-4 sm:gap-6 md:gap-8 max-w-2xl w-full mt-16 sm:mt-0 mb-20">
         <PhaseIndicator 
           phase={timer.phase}
           workSessionsCompleted={timer.workSessionsCompleted}
@@ -203,18 +203,18 @@ const Index = () => {
           onReset={timer.reset}
         />
 
-        <div className="mt-4 sm:mt-6 md:mt-8 px-4 sm:px-0">
+        <div className="mt-4 sm:mt-6 md:mt-8 px-4 sm:px-0 mb-8">
           <MotivationalQuote 
             phase={timer.phase}
             workSessionsCompleted={timer.workSessionsCompleted}
           />
         </div>
-      </main>
 
         {/* Footer */}
-        <footer className="absolute bottom-4 sm:bottom-6 text-center text-muted-foreground text-xs sm:text-sm">
+        <footer className="text-center text-muted-foreground text-xs sm:text-sm mt-6">
           <p>Built with focus and flow</p>
         </footer>
+      </main>
       </div>
     </>
   );
