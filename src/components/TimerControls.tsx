@@ -26,11 +26,12 @@ export const TimerControls = ({
       <Button
         size="lg"
         onClick={isRunning ? onPause : onStart}
-        className="relative group transition-all duration-300"
+        className="relative group transition-all duration-300 font-semibold"
         style={{
           backgroundColor: `hsl(var(--${phaseColors[phase]}))`,
           color: 'black',
-          boxShadow: `0 0 20px hsl(var(--${phaseColors[phase]}) / 0.5)`,
+          textShadow: '0 1px 2px rgba(255, 255, 255, 0.3)',
+          boxShadow: `0 0 15px hsl(var(--${phaseColors[phase]}) / 0.4), 0 2px 8px rgba(0, 0, 0, 0.1)`,
         }}
       >
         {isRunning ? (
@@ -47,7 +48,7 @@ export const TimerControls = ({
         <div 
           className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
           style={{
-            boxShadow: `0 0 30px hsl(var(--${phaseColors[phase]}) / 0.8), 0 0 60px hsl(var(--${phaseColors[phase]}) / 0.4)`,
+            boxShadow: `0 0 25px hsl(var(--${phaseColors[phase]}) / 0.6), 0 0 50px hsl(var(--${phaseColors[phase]}) / 0.3)`,
           }}
         />
       </Button>
