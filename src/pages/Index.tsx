@@ -19,7 +19,7 @@ const Index = () => {
   const wakeLockRef = useRef<WakeLockSentinel | null>(null);
 
   // Check if all sessions are completed
-  const allSessionsComplete = timer.workSessionsCompleted >= timer.settings.workSessionsBeforeLongBreak && timer.phase !== 'work' && !timer.isRunning;
+  const allSessionsComplete = timer.workSessionsCompleted >= timer.settings.workSessionsBeforeLongBreak && timer.phase !== 'work' && !timer.isRunning && !timer.sessionsSkipped;
 
   // Wake Lock - prevent device from sleeping
   useEffect(() => {

@@ -1,6 +1,17 @@
 import { Button } from '@/components/ui/button';
 import { Play, Pause, RotateCcw, SkipForward } from 'lucide-react';
 import { Phase } from '@/hooks/useTimer';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 interface TimerControlsProps {
   isRunning: boolean;
@@ -57,23 +68,53 @@ export const TimerControls = ({
         />
       </Button>
       
-      <Button
-        size="icon"
-        onClick={onReset}
-        variant="outline"
-        className="relative group transition-all duration-300 h-11 w-11"
-      >
-        <RotateCcw className="h-5 w-5" />
-      </Button>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button
+            size="icon"
+            variant="outline"
+            className="relative group transition-all duration-300 h-11 w-11"
+          >
+            <RotateCcw className="h-5 w-5" />
+          </Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Reset Timer?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will reset your timer and all progress. Are you sure you want to proceed?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={onReset}>Reset</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       
-      <Button
-        size="icon"
-        onClick={onSkip}
-        variant="outline"
-        className="relative group transition-all duration-300 h-11 w-11"
-      >
-        <SkipForward className="h-5 w-5" />
-      </Button>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button
+            size="icon"
+            variant="outline"
+            className="relative group transition-all duration-300 h-11 w-11"
+          >
+            <SkipForward className="h-5 w-5" />
+          </Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Skip Phase?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will skip the current phase and move to the next one. Are you sure you want to skip?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={onSkip}>Skip</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

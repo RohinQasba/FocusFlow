@@ -31,6 +31,7 @@ export const useTimer = () => {
   const [settings, setSettings] = useState<TimerSettings>(DEFAULT_SETTINGS);
   const [workSessionsCompleted, setWorkSessionsCompleted] = useState(0);
   const [startTime, setStartTime] = useState<Date | null>(null);
+  const [sessionsSkipped, setSessionsSkipped] = useState(false);
   
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const onPhaseChangeRef = useRef<((newPhase: Phase) => void) | null>(null);
@@ -112,12 +113,14 @@ export const useTimer = () => {
     setIsRunning(false);
     setStartTime(null);
     setWorkSessionsCompleted(0);
+    setSessionsSkipped(false);
     setPhase('work');
     const duration = settings.workDuration;
     setTimeLeft(duration * 60);
   }, [settings.workDuration]);
 
   const skip = useCallback(() => {
+    setSessionsSkipped(true);
     const nextPhase = getNextPhase();
     switchPhase(nextPhase, false);
   }, [getNextPhase, switchPhase]);
@@ -167,6 +170,7 @@ export const useTimer = () => {
     settings,
     workSessionsCompleted,
     startTime,
+    sessionsSkipped,
     start,
     pause,
     reset,
