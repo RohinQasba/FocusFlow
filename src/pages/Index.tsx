@@ -163,6 +163,38 @@ const Index = () => {
     }
   };
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      // Ignore if user is typing in an input
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+        return;
+      }
+
+      switch (e.key.toLowerCase()) {
+        case ' ':
+          e.preventDefault();
+          if (timer.isRunning) {
+            timer.pause();
+          } else {
+            timer.start();
+          }
+          break;
+        case 'r':
+          e.preventDefault();
+          timer.reset();
+          break;
+        case 's':
+          e.preventDefault();
+          timer.skip();
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [timer]);
+
   const phaseColors = {
     work: 'hsl(var(--work))',
     shortBreak: 'hsl(var(--short-break))',
@@ -248,6 +280,7 @@ const Index = () => {
           onStart={timer.start}
           onPause={timer.pause}
           onReset={timer.reset}
+          onSkip={timer.skip}
         />
 
         <div className="mt-4 sm:mt-6 md:mt-8 px-4 sm:px-0 mb-8">
