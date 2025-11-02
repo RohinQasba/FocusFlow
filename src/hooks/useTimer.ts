@@ -38,11 +38,16 @@ export const useTimer = () => {
 
   // Load settings from localStorage
   useEffect(() => {
-    const stored = localStorage.getItem('focusflow-settings');
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      setSettings(parsed);
-      setTimeLeft(parsed.workDuration * 60);
+    try {
+      const stored = localStorage.getItem('focusflow-settings');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        setSettings(parsed);
+        setTimeLeft(parsed.workDuration * 60);
+      }
+    } catch (error) {
+      console.error('Error loading settings:', error);
+      localStorage.removeItem('focusflow-settings');
     }
   }, []);
 
