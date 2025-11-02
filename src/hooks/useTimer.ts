@@ -18,7 +18,7 @@ const DEFAULT_SETTINGS: TimerSettings = {
   shortBreakDuration: 5,
   longBreakDuration: 15,
   autoStartNextPhase: true,
-  brownNoiseEnabled: true,
+  brownNoiseEnabled: false,
   workSessionsBeforeLongBreak: 2,
   autoDarkMode: true,
   screenDimming: true,
