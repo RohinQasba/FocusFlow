@@ -25,6 +25,7 @@ import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Settings, RotateCcw } from 'lucide-react';
 import { TimerSettings } from '@/hooks/useTimer';
+import { useToast } from '@/hooks/use-toast';
 
 interface SettingsDialogProps {
   settings: TimerSettings;
@@ -33,11 +34,65 @@ interface SettingsDialogProps {
 }
 
 export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps) => {
+  const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [tempSettings, setTempSettings] = useState(settings);
+  const [workInput, setWorkInput] = useState(settings.workDuration.toString());
+  const [shortBreakInput, setShortBreakInput] = useState(settings.shortBreakDuration.toString());
+  const [longBreakInput, setLongBreakInput] = useState(settings.longBreakDuration.toString());
+  const [sessionsInput, setSessionsInput] = useState(settings.workSessionsBeforeLongBreak.toString());
 
   const handleSave = () => {
-    onSave(tempSettings);
+    // Validate inputs
+    const work = parseInt(workInput);
+    const shortBreak = parseInt(shortBreakInput);
+    const longBreak = parseInt(longBreakInput);
+    const sessions = parseInt(sessionsInput);
+
+    if (!workInput || isNaN(work) || work < 1 || work > 60) {
+      toast({
+        title: "Invalid Work Duration",
+        description: "Work duration must be between 1 and 60 minutes",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!shortBreakInput || isNaN(shortBreak) || shortBreak < 1 || shortBreak > 30) {
+      toast({
+        title: "Invalid Short Break Duration",
+        description: "Short break duration must be between 1 and 30 minutes",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!longBreakInput || isNaN(longBreak) || longBreak < 1 || longBreak > 60) {
+      toast({
+        title: "Invalid Long Break Duration",
+        description: "Long break duration must be between 1 and 60 minutes",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!sessionsInput || isNaN(sessions) || sessions < 1 || sessions > 10) {
+      toast({
+        title: "Invalid Sessions Count",
+        description: "Sessions before long break must be between 1 and 10",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // All valid, save settings
+    onSave({
+      ...tempSettings,
+      workDuration: work,
+      shortBreakDuration: shortBreak,
+      longBreakDuration: longBreak,
+      workSessionsBeforeLongBreak: sessions,
+    });
     setOpen(false);
   };
 
@@ -82,10 +137,8 @@ export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps)
                 type="number"
                 min="1"
                 max="60"
-                value={tempSettings.workDuration}
-                onChange={(e) =>
-                  setTempSettings({ ...tempSettings, workDuration: parseInt(e.target.value) || 25 })
-                }
+                value={workInput}
+                onChange={(e) => setWorkInput(e.target.value)}
                 className="bg-background border-border"
               />
             </div>
@@ -96,10 +149,8 @@ export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps)
                 type="number"
                 min="1"
                 max="30"
-                value={tempSettings.shortBreakDuration}
-                onChange={(e) =>
-                  setTempSettings({ ...tempSettings, shortBreakDuration: parseInt(e.target.value) || 5 })
-                }
+                value={shortBreakInput}
+                onChange={(e) => setShortBreakInput(e.target.value)}
                 className="bg-background border-border"
               />
             </div>
@@ -110,10 +161,8 @@ export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps)
                 type="number"
                 min="1"
                 max="60"
-                value={tempSettings.longBreakDuration}
-                onChange={(e) =>
-                  setTempSettings({ ...tempSettings, longBreakDuration: parseInt(e.target.value) || 15 })
-                }
+                value={longBreakInput}
+                onChange={(e) => setLongBreakInput(e.target.value)}
                 className="bg-background border-border"
               />
             </div>
@@ -127,10 +176,8 @@ export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps)
                 type="number"
                 min="1"
                 max="10"
-                value={tempSettings.workSessionsBeforeLongBreak}
-                onChange={(e) =>
-                  setTempSettings({ ...tempSettings, workSessionsBeforeLongBreak: parseInt(e.target.value) || 2 })
-                }
+                value={sessionsInput}
+                onChange={(e) => setSessionsInput(e.target.value)}
                 className="bg-background border-border"
               />
             </div>
