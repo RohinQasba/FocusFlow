@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useTimer } from '@/hooks/useTimer';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { TimerArc } from '@/components/TimerArc';
@@ -16,9 +16,56 @@ const Index = () => {
   const { playBrownNoise, stopBrownNoise, playPhaseTransition } = useSoundEffects();
   const [, setForceUpdate] = useState(0);
   const [showVictory, setShowVictory] = useState(false);
+  const wakeLockRef = useRef<WakeLockSentinel | null>(null);
 
   // Check if all sessions are completed
   const allSessionsComplete = timer.workSessionsCompleted >= timer.settings.workSessionsBeforeLongBreak && timer.phase !== 'work' && !timer.isRunning;
+
+  // Wake Lock - prevent device from sleeping
+  useEffect(() => {
+    const requestWakeLock = async () => {
+      try {
+        if ('wakeLock' in navigator && timer.isRunning) {
+          wakeLockRef.current = await navigator.wakeLock.request('screen');
+          console.log('Wake Lock activated - screen will not sleep');
+        }
+      } catch (err) {
+        console.error('Wake Lock error:', err);
+      }
+    };
+
+    const releaseWakeLock = async () => {
+      if (wakeLockRef.current) {
+        try {
+          await wakeLockRef.current.release();
+          wakeLockRef.current = null;
+          console.log('Wake Lock released');
+        } catch (err) {
+          console.error('Wake Lock release error:', err);
+        }
+      }
+    };
+
+    if (timer.isRunning) {
+      requestWakeLock();
+    } else {
+      releaseWakeLock();
+    }
+
+    // Handle visibility change (re-acquire wake lock when page becomes visible)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && timer.isRunning) {
+        requestWakeLock();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      releaseWakeLock();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [timer.isRunning]);
 
   // Auto dark mode after 10 seconds
   useEffect(() => {
@@ -49,13 +96,13 @@ const Index = () => {
     const dimmingEnabled = timer.settings.screenDimming !== false;
     
     if (timer.isRunning && dimmingEnabled && autoDarkEnabled) {
-      console.log('Starting dimming timer - will dim in 10 seconds');
+      console.log('Starting dimming timer - will dim in 15 seconds');
       const timeout = setTimeout(() => {
         console.log('Dimming screen now');
         document.body.style.filter = 'brightness(0.4)';
         document.body.style.transition = 'filter 1s ease-in-out';
         setIsDimmed(true);
-      }, 10000);
+      }, 15000);
       return () => {
         clearTimeout(timeout);
         if (!isDimmed) {
