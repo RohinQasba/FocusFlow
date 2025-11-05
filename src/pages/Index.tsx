@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useTimer } from '@/hooks/useTimer';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
+import { useTheme } from '@/contexts/ThemeContext';
 import { TimerArc } from '@/components/TimerArc';
 import { TimerControls } from '@/components/TimerControls';
 import { PhaseIndicator } from '@/components/PhaseIndicator';
@@ -8,11 +9,13 @@ import { MotivationalQuote } from '@/components/MotivationalQuote';
 import { SettingsDialog } from '@/components/SettingsDialog';
 import { TimeRange } from '@/components/TimeRange';
 import { VictoryScreen } from '@/components/VictoryScreen';
+import { WallpaperBackground } from '@/components/WallpaperBackground';
 import { Button } from '@/components/ui/button';
 import { Volume2, VolumeX, Maximize } from 'lucide-react';
 
 const Index = () => {
   const timer = useTimer();
+  const { theme } = useTheme();
   const { playBrownNoise, stopBrownNoise, playPhaseTransition } = useSoundEffects();
   const [, setForceUpdate] = useState(0);
   const [showVictory, setShowVictory] = useState(false);
@@ -203,6 +206,8 @@ const Index = () => {
 
   return (
     <>
+      <WallpaperBackground wallpaperId={theme.wallpaper} />
+      
       {showVictory && (
         <VictoryScreen 
           totalSessions={timer.settings.workSessionsBeforeLongBreak}
@@ -211,10 +216,7 @@ const Index = () => {
       )}
 
       <div 
-        className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 transition-all duration-[1500ms] ease-in-out"
-        style={{
-          background: `linear-gradient(135deg, hsl(var(--background)) 0%, ${phaseColors[timer.phase]}15 100%)`,
-        }}
+        className="relative min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 transition-all duration-[1500ms] ease-in-out"
         onClick={handleScreenClick}
       >
       {/* Header */}

@@ -18,6 +18,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -26,6 +27,7 @@ import { Switch } from '@/components/ui/switch';
 import { Settings, RotateCcw } from 'lucide-react';
 import { TimerSettings } from '@/hooks/useTimer';
 import { useToast } from '@/hooks/use-toast';
+import { AppearanceSettings } from './AppearanceSettings';
 
 interface SettingsDialogProps {
   settings: TimerSettings;
@@ -125,11 +127,19 @@ export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps)
         <DialogHeader>
           <DialogTitle className="text-2xl">Settings</DialogTitle>
           <DialogDescription>
-            Customize your Pomodoro timer preferences
+            Customize your Pomodoro timer and appearance
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="flex-1 h-[65vh] pr-2 overflow-y-auto">
-          <div className="grid gap-6 py-4 pr-4">
+        
+        <Tabs defaultValue="timer" className="flex-1 flex flex-col">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="timer">Timer</TabsTrigger>
+            <TabsTrigger value="appearance">Themes</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="timer" className="flex-1 mt-0">
+            <ScrollArea className="h-[55vh] pr-2 overflow-y-auto mt-4">
+              <div className="grid gap-6 py-4 pr-4">
             <div className="grid gap-2">
               <Label htmlFor="work">Work Duration (minutes)</Label>
               <Input
@@ -242,35 +252,45 @@ export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps)
               />
             </div>
             
-            <div className="pt-4 border-t">
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button
-                    variant="destructive"
-                    className="w-full"
-                  >
-                    <RotateCcw className="mr-2 h-4 w-4" />
-                    Reset Everything
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Reset Everything?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This will clear all your settings, progress, and stored data. This action cannot be undone.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleCompleteReset}>
-                      Yes, reset everything
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
-          </div>
-        </ScrollArea>
+                <div className="pt-4 border-t">
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant="destructive"
+                        className="w-full"
+                      >
+                        <RotateCcw className="mr-2 h-4 w-4" />
+                        Reset Everything
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Reset Everything?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This will clear all your settings, progress, and stored data. This action cannot be undone.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleCompleteReset}>
+                          Yes, reset everything
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
+              </div>
+            </ScrollArea>
+          </TabsContent>
+          
+          <TabsContent value="appearance" className="flex-1 mt-0">
+            <ScrollArea className="h-[55vh] pr-2 overflow-y-auto mt-4">
+              <div className="pr-4">
+                <AppearanceSettings />
+              </div>
+            </ScrollArea>
+          </TabsContent>
+        </Tabs>
         <div className="flex justify-end gap-2 pt-4 border-t border-border">
           <Button variant="outline" onClick={() => setOpen(false)}>
             Cancel
