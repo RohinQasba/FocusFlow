@@ -4,6 +4,14 @@ export default {
   darkMode: ["class"],
   content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
   prefix: "",
+  safelist: [
+    'font-inter',
+    'font-poppins', 
+    'font-manrope',
+    'font-space-grotesk',
+    'font-orbitron',
+    'font-exo-2',
+  ],
   theme: {
     container: {
       center: true,
