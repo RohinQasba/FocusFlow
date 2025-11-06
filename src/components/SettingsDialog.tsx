@@ -19,7 +19,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -280,6 +280,7 @@ export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps)
                   </AlertDialog>
                 </div>
               </div>
+              <ScrollBar orientation="vertical" />
             </ScrollArea>
           </TabsContent>
           
@@ -288,6 +289,7 @@ export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps)
               <div className="pr-4">
                 <AppearanceSettings />
               </div>
+              <ScrollBar orientation="vertical" />
             </ScrollArea>
           </TabsContent>
         </Tabs>
