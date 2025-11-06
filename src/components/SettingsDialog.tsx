@@ -284,9 +284,11 @@ export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps)
           </TabsContent>
           
           <TabsContent value="appearance" className="flex-1 mt-0">
-            <div className="mt-4">
-              <AppearanceSettings />
-            </div>
+            <ScrollArea className="h-[55vh] pr-2 overflow-y-auto mt-4">
+              <div className="pr-4">
+                <AppearanceSettings />
+              </div>
+            </ScrollArea>
           </TabsContent>
         </Tabs>
         <div className="flex justify-end gap-2 pt-4 border-t border-border">

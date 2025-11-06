@@ -69,32 +69,29 @@ export const AppearanceSettings = () => {
           <h3 className="text-lg font-semibold">Choose Font Style</h3>
         </div>
         
-        <ScrollArea className="h-[400px] pr-4">
-          <div className="grid grid-cols-1 gap-3 pb-4">
-            {fonts.map((font) => (
-              <button
-                key={font}
-                onClick={() => updateFont(font)}
-                className={`p-5 rounded-lg border-2 transition-all duration-300 hover:scale-[1.02] ${
-                  theme.font === font
-                    ? 'border-primary bg-primary/10'
-                    : 'border-border bg-card hover:border-primary/50'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <span className={`font-semibold text-base font-${font}`}>{FONT_NAMES[font]}</span>
-                  {theme.font === font && (
-                    <Check className="h-5 w-5 text-primary" />
-                  )}
-                </div>
-                <p className={`font-${font} text-sm text-muted-foreground text-left`}>
-                  The quick brown fox jumps over the lazy dog. 1234567890
-                </p>
-              </button>
-            ))}
-          </div>
-          <ScrollBar orientation="vertical" />
-        </ScrollArea>
+        <div className="grid grid-cols-1 gap-3 pb-4">
+          {fonts.map((font) => (
+            <button
+              key={font}
+              onClick={() => updateFont(font)}
+              className={`p-5 rounded-lg border-2 transition-all duration-300 hover:scale-[1.02] ${
+                theme.font === font
+                  ? 'border-primary bg-primary/10'
+                  : 'border-border bg-card hover:border-primary/50'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-3">
+                <span className={`font-semibold text-base font-${font}`}>{FONT_NAMES[font]}</span>
+                {theme.font === font && (
+                  <Check className="h-5 w-5 text-primary" />
+                )}
+              </div>
+              <p className={`font-${font} text-sm text-muted-foreground text-left`}>
+                The quick brown fox jumps over the lazy dog. 1234567890
+              </p>
+            </button>
+          ))}
+        </div>
       </div>
     );
   }
@@ -127,10 +124,10 @@ export const AppearanceSettings = () => {
           ))}
         </TabsList>
         
-        <ScrollArea className="h-[350px] mt-4">
+        <div className="mt-4">
           {categories.map((category) => (
             <TabsContent key={category} value={category} className="mt-0">
-              <div className="grid grid-cols-2 gap-3 pr-4 pb-4">
+              <div className="grid grid-cols-2 gap-3 pb-4">
                 {getWallpapersByCategory(category).map((wallpaper) => (
                   <button
                     key={wallpaper.id}
@@ -161,8 +158,7 @@ export const AppearanceSettings = () => {
               </div>
             </TabsContent>
           ))}
-          <ScrollBar orientation="vertical" />
-        </ScrollArea>
+        </div>
       </Tabs>
     </div>
   );
