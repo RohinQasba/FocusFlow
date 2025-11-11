@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Play, Pause, RotateCcw, SkipForward } from 'lucide-react';
 import { Phase } from '@/hooks/useTimer';
+import { useTheme } from '@/contexts/ThemeContext';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,11 +31,15 @@ export const TimerControls = ({
   onReset,
   onSkip
 }: TimerControlsProps) => {
+  const { theme } = useTheme();
   const phaseColors = {
     work: 'work',
     shortBreak: 'short-break',
     longBreak: 'long-break',
   };
+
+  // Use white text for black accent color
+  const textColor = theme.accentColor === 'black' ? 'white' : 'black';
 
   return (
     <div className="flex items-center justify-center gap-4">
@@ -44,19 +49,19 @@ export const TimerControls = ({
         className="relative group transition-all duration-300 font-semibold"
         style={{
           backgroundColor: `hsl(var(--${phaseColors[phase]}))`,
-          color: 'black',
-          textShadow: '0 1px 2px rgba(255, 255, 255, 0.3)',
+          color: textColor,
+          textShadow: textColor === 'white' ? '0 1px 2px rgba(0, 0, 0, 0.3)' : '0 1px 2px rgba(255, 255, 255, 0.3)',
           boxShadow: `0 0 15px hsl(var(--${phaseColors[phase]}) / 0.4), 0 2px 8px rgba(0, 0, 0, 0.1)`,
         }}
       >
         {isRunning ? (
           <>
-            <Pause className="mr-2 h-5 w-5" />
+            <Pause className="mr-2 h-5 w-5" style={{ fill: textColor }} />
             Pause
           </>
         ) : (
           <>
-            <Play className="mr-2 h-5 w-5 fill-black" />
+            <Play className="mr-2 h-5 w-5" style={{ fill: textColor }} />
             Start
           </>
         )}

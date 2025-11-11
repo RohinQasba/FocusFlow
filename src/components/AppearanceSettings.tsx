@@ -27,7 +27,7 @@ export const AppearanceSettings = () => {
             onClick={() => setViewMode('fonts')}
             variant="outline"
             size="lg"
-            className="h-20 flex flex-col gap-2 hover:border-primary hover:bg-primary/5"
+            className="h-20 flex flex-col gap-2 hover:border-accent hover:bg-accent/5"
           >
             <Type className="h-6 w-6" />
             <div>
@@ -40,7 +40,7 @@ export const AppearanceSettings = () => {
             onClick={() => setViewMode('wallpapers')}
             variant="outline"
             size="lg"
-            className="h-20 flex flex-col gap-2 hover:border-primary hover:bg-primary/5"
+            className="h-20 flex flex-col gap-2 hover:border-accent hover:bg-accent/5"
           >
             <Image className="h-6 w-6" />
             <div>
@@ -53,7 +53,7 @@ export const AppearanceSettings = () => {
             onClick={() => setViewMode('accent-colors')}
             variant="outline"
             size="lg"
-            className="h-20 flex flex-col gap-2 hover:border-primary hover:bg-primary/5"
+            className="h-20 flex flex-col gap-2 hover:border-accent hover:bg-accent/5"
           >
             <Palette className="h-6 w-6" />
             <div>
@@ -91,14 +91,14 @@ export const AppearanceSettings = () => {
                 onClick={() => updateFont(font)}
                 className={`p-5 rounded-lg border-2 transition-all duration-300 hover:scale-[1.02] ${
                   theme.font === font
-                    ? 'border-primary bg-primary/10'
-                    : 'border-border bg-card hover:border-primary/50'
+                    ? 'border-accent bg-accent/10'
+                    : 'border-border bg-card hover:border-accent/50'
                 }`}
               >
                 <div className="flex items-center justify-between mb-3">
                   <span className={`font-semibold text-base ${fontClass}`}>{FONT_NAMES[font]}</span>
                   {theme.font === font && (
-                    <Check className="h-5 w-5 text-primary" />
+                    <Check className="h-5 w-5 text-accent" />
                   )}
                 </div>
                 <p className={`${fontClass} text-sm text-muted-foreground text-left`}>
@@ -137,8 +137,8 @@ export const AppearanceSettings = () => {
                 onClick={() => updateAccentColor(color)}
                 className={`p-4 rounded-lg border-2 transition-all duration-300 hover:scale-105 ${
                   theme.accentColor === color
-                    ? 'border-primary ring-2 ring-primary/20'
-                    : 'border-border hover:border-primary/50'
+                    ? 'border-accent ring-2 ring-accent/20'
+                    : 'border-border hover:border-accent/50'
                 }`}
               >
                 <div className="flex flex-col items-center gap-2">
@@ -148,7 +148,7 @@ export const AppearanceSettings = () => {
                   />
                   <span className="text-xs font-medium">{colorData.name}</span>
                   {theme.accentColor === color && (
-                    <Check className="h-4 w-4 text-primary" />
+                    <Check className="h-4 w-4 text-accent" />
                   )}
                 </div>
               </button>
@@ -194,7 +194,19 @@ export const AppearanceSettings = () => {
                 {getWallpapersByCategory(category).map((wallpaper) => {
                   // Check if this solid color matches the current accent color
                   const isSolidColor = wallpaper.category === 'solid-colors';
-                  const matchesAccent = isSolidColor && wallpaper.color?.toLowerCase().includes(theme.accentColor === 'black' ? '#0a0a0a' : '');
+                  // Map accent colors to their corresponding wallpaper IDs
+                  const accentToWallpaper: Record<string, string> = {
+                    'red': 'solid-red',
+                    'blue': 'solid-blue',
+                    'light-blue': 'solid-light-blue',
+                    'green': 'solid-green',
+                    'purple': 'solid-purple',
+                    'orange': 'solid-orange',
+                    'pink': 'solid-pink',
+                    'yellow': 'solid-yellow',
+                    'black': 'solid-black'
+                  };
+                  const matchesAccent = isSolidColor && wallpaper.id === accentToWallpaper[theme.accentColor];
                   
                   return (
                     <button
@@ -203,10 +215,10 @@ export const AppearanceSettings = () => {
                       disabled={matchesAccent}
                       className={`relative rounded-lg overflow-hidden border-2 transition-all duration-300 hover:scale-105 group ${
                         theme.wallpaper === wallpaper.id
-                          ? 'border-primary ring-2 ring-primary/20'
+                          ? 'border-accent ring-2 ring-accent/20'
                           : matchesAccent 
                             ? 'border-border opacity-40 cursor-not-allowed hover:scale-100'
-                            : 'border-border hover:border-primary/50'
+                            : 'border-border hover:border-accent/50'
                       }`}
                     >
                       <div className="aspect-video relative">
@@ -223,8 +235,8 @@ export const AppearanceSettings = () => {
                           />
                         )}
                         {theme.wallpaper === wallpaper.id && (
-                          <div className="absolute inset-0 bg-primary/20 flex items-center justify-center">
-                            <Check className="h-8 w-8 text-primary drop-shadow-lg" />
+                          <div className="absolute inset-0 bg-accent/20 flex items-center justify-center">
+                            <Check className="h-8 w-8 text-accent drop-shadow-lg" />
                           </div>
                         )}
                       </div>
