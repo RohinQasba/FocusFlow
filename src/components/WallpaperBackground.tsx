@@ -9,12 +9,16 @@ export const WallpaperBackground = ({ wallpaperId }: WallpaperBackgroundProps) =
 
   if (!wallpaper) return null;
 
+  // For solid colors, use the color directly instead of an image
+  const isSolidColor = wallpaper.category === 'solid-colors';
+
   return (
     <>
       <div
         className="fixed inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 ease-in-out"
         style={{ 
-          backgroundImage: `url(${wallpaper.path})`,
+          backgroundColor: isSolidColor ? wallpaper.color : undefined,
+          backgroundImage: isSolidColor ? undefined : `url(${wallpaper.path})`,
           zIndex: -2,
         }}
       />

@@ -1,10 +1,11 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { ThemeSettings, FontFamily } from '@/types/theme';
+import { ThemeSettings, FontFamily, AccentColor, ACCENT_COLOR_VALUES } from '@/types/theme';
 
 interface ThemeContextType {
   theme: ThemeSettings;
   updateFont: (font: FontFamily) => void;
   updateWallpaper: (wallpaperId: string) => void;
+  updateAccentColor: (color: AccentColor) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -12,6 +13,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 const DEFAULT_THEME: ThemeSettings = {
   font: 'inter',
   wallpaper: 'soft-gradient-1',
+  accentColor: 'red',
 };
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
@@ -45,6 +47,15 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     document.body.classList.add(`font-${theme.font}`);
   }, [theme.font]);
 
+  // Apply accent color to CSS variables
+  useEffect(() => {
+    const accentHsl = ACCENT_COLOR_VALUES[theme.accentColor].hsl;
+    document.documentElement.style.setProperty('--accent', accentHsl);
+    document.documentElement.style.setProperty('--ring', accentHsl);
+    document.documentElement.style.setProperty('--work', accentHsl);
+    document.documentElement.style.setProperty('--work-glow', accentHsl);
+  }, [theme.accentColor]);
+
   const updateFont = (font: FontFamily) => {
     setTheme(prev => ({ ...prev, font }));
   };
@@ -53,8 +64,12 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     setTheme(prev => ({ ...prev, wallpaper: wallpaperId }));
   };
 
+  const updateAccentColor = (accentColor: AccentColor) => {
+    setTheme(prev => ({ ...prev, accentColor }));
+  };
+
   return (
-    <ThemeContext.Provider value={{ theme, updateFont, updateWallpaper }}>
+    <ThemeContext.Provider value={{ theme, updateFont, updateWallpaper, updateAccentColor }}>
       {children}
     </ThemeContext.Provider>
   );

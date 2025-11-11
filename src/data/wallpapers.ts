@@ -35,6 +35,18 @@ export const wallpapers: Wallpaper[] = [
   { id: 'nature-organic-3', name: 'Forest Atmosphere', category: 'nature-organic', path: '/wallpapers/nature-organic-3.jpg' },
   { id: 'nature-organic-4', name: 'Cloud Formations', category: 'nature-organic', path: '/wallpapers/nature-organic-4.jpg' },
   { id: 'nature-organic-5', name: 'Flowing Curves', category: 'nature-organic', path: '/wallpapers/nature-organic-5.jpg' },
+  
+  // Solid Colors
+  { id: 'solid-black', name: 'Black', category: 'solid-colors', path: '', color: '#0A0A0A' },
+  { id: 'solid-dark-gray', name: 'Dark Gray', category: 'solid-colors', path: '', color: '#1A1A1A' },
+  { id: 'solid-charcoal', name: 'Charcoal', category: 'solid-colors', path: '', color: '#2D2D2D' },
+  { id: 'solid-navy', name: 'Navy', category: 'solid-colors', path: '', color: '#0F1729' },
+  { id: 'solid-deep-blue', name: 'Deep Blue', category: 'solid-colors', path: '', color: '#1A2332' },
+  { id: 'solid-dark-teal', name: 'Dark Teal', category: 'solid-colors', path: '', color: '#0D1F1F' },
+  { id: 'solid-forest', name: 'Forest', category: 'solid-colors', path: '', color: '#0F1F0F' },
+  { id: 'solid-burgundy', name: 'Burgundy', category: 'solid-colors', path: '', color: '#2D1420' },
+  { id: 'solid-deep-purple', name: 'Deep Purple', category: 'solid-colors', path: '', color: '#1A0F2E' },
+  { id: 'solid-midnight-blue', name: 'Midnight Blue', category: 'solid-colors', path: '', color: '#0A1628' },
 ];
 
 export const getWallpapersByCategory = (category: string) => {
