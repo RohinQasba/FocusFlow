@@ -25,7 +25,12 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       const stored = localStorage.getItem('focusflow-theme');
       if (stored) {
         const parsed = JSON.parse(stored);
-        setTheme(parsed);
+        // Ensure accentColor exists, fallback to default if not
+        setTheme({
+          ...DEFAULT_THEME,
+          ...parsed,
+          accentColor: parsed.accentColor || DEFAULT_THEME.accentColor,
+        });
       }
     } catch (error) {
       console.error('Error loading theme:', error);
@@ -49,11 +54,14 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   // Apply accent color to CSS variables
   useEffect(() => {
-    const accentHsl = ACCENT_COLOR_VALUES[theme.accentColor].hsl;
-    document.documentElement.style.setProperty('--accent', accentHsl);
-    document.documentElement.style.setProperty('--ring', accentHsl);
-    document.documentElement.style.setProperty('--work', accentHsl);
-    document.documentElement.style.setProperty('--work-glow', accentHsl);
+    const colorData = ACCENT_COLOR_VALUES[theme.accentColor];
+    if (colorData) {
+      const accentHsl = colorData.hsl;
+      document.documentElement.style.setProperty('--accent', accentHsl);
+      document.documentElement.style.setProperty('--ring', accentHsl);
+      document.documentElement.style.setProperty('--work', accentHsl);
+      document.documentElement.style.setProperty('--work-glow', accentHsl);
+    }
   }, [theme.accentColor]);
 
   const updateFont = (font: FontFamily) => {
