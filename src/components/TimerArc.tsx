@@ -1,4 +1,5 @@
 import { Phase } from '@/hooks/useTimer';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface TimerArcProps {
   phase: Phase;
@@ -7,6 +8,7 @@ interface TimerArcProps {
 }
 
 export const TimerArc = ({ phase, timeLeft, totalTime }: TimerArcProps) => {
+  const { theme } = useTheme();
   const progress = (timeLeft / totalTime) * 100;
   const radius = 140;
   const strokeWidth = 16;
@@ -66,7 +68,9 @@ export const TimerArc = ({ phase, timeLeft, totalTime }: TimerArcProps) => {
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="text-center">
           <div 
-            className="text-6xl md:text-7xl font-bold tabular-nums transition-colors duration-600"
+            className={`font-bold tabular-nums transition-colors duration-600 ${
+              theme.font === 'orbitron' ? 'text-5xl md:text-6xl' : 'text-6xl md:text-7xl'
+            }`}
             style={{ color: phaseColors[phase] }}
           >
             {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}

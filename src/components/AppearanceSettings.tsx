@@ -70,27 +70,30 @@ export const AppearanceSettings = () => {
         </div>
         
         <div className="grid grid-cols-1 gap-3 pb-4">
-          {fonts.map((font) => (
-            <button
-              key={font}
-              onClick={() => updateFont(font)}
-              className={`p-5 rounded-lg border-2 transition-all duration-300 hover:scale-[1.02] ${
-                theme.font === font
-                  ? 'border-primary bg-primary/10'
-                  : 'border-border bg-card hover:border-primary/50'
-              }`}
-            >
-              <div className="flex items-center justify-between mb-3">
-                <span className={`font-semibold text-base font-${font}`}>{FONT_NAMES[font]}</span>
-                {theme.font === font && (
-                  <Check className="h-5 w-5 text-primary" />
-                )}
-              </div>
-              <p className={`font-${font} text-sm text-muted-foreground text-left`}>
-                The quick brown fox jumps over the lazy dog. 1234567890
-              </p>
-            </button>
-          ))}
+          {fonts.map((font) => {
+            const fontClass = `font-${font}`;
+            return (
+              <button
+                key={font}
+                onClick={() => updateFont(font)}
+                className={`p-5 rounded-lg border-2 transition-all duration-300 hover:scale-[1.02] ${
+                  theme.font === font
+                    ? 'border-primary bg-primary/10'
+                    : 'border-border bg-card hover:border-primary/50'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <span className={`font-semibold text-base ${fontClass}`}>{FONT_NAMES[font]}</span>
+                  {theme.font === font && (
+                    <Check className="h-5 w-5 text-primary" />
+                  )}
+                </div>
+                <p className={`${fontClass} text-sm text-muted-foreground text-left`}>
+                  The quick brown fox jumps over the lazy dog. 1234567890
+                </p>
+              </button>
+            );
+          })}
         </div>
       </div>
     );
