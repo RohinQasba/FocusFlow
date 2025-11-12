@@ -45,5 +45,5 @@ export const ACCENT_COLOR_VALUES: Record<AccentColor, { hsl: string; name: strin
   'orange': { hsl: '25 95% 53%', name: 'Orange' },
   'pink': { hsl: '330 81% 60%', name: 'Pink' },
   'yellow': { hsl: '48 96% 53%', name: 'Yellow' },
-  'black': { hsl: '0 0% 10%', name: 'Black' },
+  'black': { hsl: '0 0% 0%', name: 'Black' },
 };
