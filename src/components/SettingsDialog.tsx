@@ -28,6 +28,7 @@ import { Settings, RotateCcw } from 'lucide-react';
 import { TimerSettings } from '@/hooks/useTimer';
 import { useToast } from '@/hooks/use-toast';
 import { AppearanceSettings } from './AppearanceSettings';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface SettingsDialogProps {
   settings: TimerSettings;
@@ -37,6 +38,7 @@ interface SettingsDialogProps {
 
 export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps) => {
   const { toast } = useToast();
+  const { theme } = useTheme();
   const [open, setOpen] = useState(false);
   const [tempSettings, setTempSettings] = useState(settings);
   const [workInput, setWorkInput] = useState(settings.workDuration.toString());
@@ -293,7 +295,7 @@ export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps)
             </ScrollArea>
           </TabsContent>
         </Tabs>
-        <div className="flex justify-end gap-2 pt-4 border-t border-border">
+        <div className="flex justify-end gap-2 pt-4 pb-2 border-t border-border mt-2">
           <Button variant="outline" onClick={() => setOpen(false)}>
             Cancel
           </Button>
@@ -302,8 +304,8 @@ export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps)
             className="font-semibold"
             style={{
               backgroundColor: phaseColors[phase],
-              color: 'black',
-              textShadow: '0 1px 2px rgba(255, 255, 255, 0.3)',
+              color: theme.accentColor === 'black' || theme.accentColor === 'blue' || theme.accentColor === 'purple' ? 'white' : 'black',
+              textShadow: theme.accentColor === 'black' || theme.accentColor === 'blue' || theme.accentColor === 'purple' ? '0 1px 2px rgba(0, 0, 0, 0.3)' : '0 1px 2px rgba(255, 255, 255, 0.3)',
               boxShadow: `0 0 15px ${phaseColors[phase]}66, 0 2px 8px rgba(0, 0, 0, 0.1)`,
             }}
           >

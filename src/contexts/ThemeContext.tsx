@@ -57,7 +57,12 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     const colorData = ACCENT_COLOR_VALUES[theme.accentColor];
     if (colorData) {
       const accentHsl = colorData.hsl;
+      // Determine foreground color based on accent color brightness
+      const darkColors = ['black', 'blue', 'purple'];
+      const accentForeground = darkColors.includes(theme.accentColor) ? '0 0% 100%' : '0 0% 0%';
+      
       document.documentElement.style.setProperty('--accent', accentHsl);
+      document.documentElement.style.setProperty('--accent-foreground', accentForeground);
       document.documentElement.style.setProperty('--ring', accentHsl);
       document.documentElement.style.setProperty('--work', accentHsl);
       document.documentElement.style.setProperty('--work-glow', accentHsl);
