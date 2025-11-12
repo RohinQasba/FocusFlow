@@ -221,14 +221,14 @@ const Index = () => {
       >
       {/* Header */}
       <header className="absolute top-4 sm:top-6 left-0 right-0 flex items-center justify-between px-4 sm:px-6 max-w-5xl mx-auto">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
           FocusFlow
         </h1>
         <div className="flex items-center gap-1 sm:gap-2">
           <Button
             size="icon"
             variant="ghost"
-            className="rounded-full hover:bg-card transition-colors duration-300 h-9 w-9 sm:h-10 sm:w-10"
+            className="rounded-full hover:bg-card transition-colors duration-300 h-9 w-9 sm:h-10 sm:w-10 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
             onClick={() => timer.updateSettings({ ...timer.settings, brownNoiseEnabled: !timer.settings.brownNoiseEnabled })}
           >
             {timer.settings.brownNoiseEnabled ? (
@@ -241,17 +241,19 @@ const Index = () => {
           <Button
             size="icon"
             variant="ghost"
-            className="rounded-full hover:bg-card transition-colors duration-300 h-9 w-9 sm:h-10 sm:w-10"
+            className="rounded-full hover:bg-card transition-colors duration-300 h-9 w-9 sm:h-10 sm:w-10 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
             onClick={handleFullscreen}
           >
             <Maximize className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
 
-          <SettingsDialog 
-            settings={timer.settings}
-            onSave={timer.updateSettings}
-            phase={timer.phase}
-          />
+          <div className="drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+            <SettingsDialog 
+              settings={timer.settings}
+              onSave={timer.updateSettings}
+              phase={timer.phase}
+            />
+          </div>
         </div>
       </header>
 
@@ -294,7 +296,7 @@ const Index = () => {
 
         {/* Footer */}
         <footer className="text-center text-muted-foreground text-xs sm:text-sm mt-6">
-          <p>Built with focus and flow</p>
+          <p className="drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">Built with focus and flow</p>
         </footer>
       </main>
       </div>

@@ -17,7 +17,7 @@ export const TimeRange = ({ startTime, endTime }: TimeRangeProps) => {
   };
 
   return (
-    <div className="text-center text-muted-foreground text-sm md:text-base">
+    <div className="text-center text-muted-foreground text-sm md:text-base drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
       {formatTime(startTime)} – {formatTime(endTime)}
     </div>
   );

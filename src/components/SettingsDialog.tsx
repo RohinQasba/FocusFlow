@@ -305,8 +305,10 @@ export const SettingsDialog = ({ settings, onSave, phase }: SettingsDialogProps)
             style={{
               backgroundColor: phaseColors[phase],
               color: theme.accentColor === 'black' || theme.accentColor === 'blue' || theme.accentColor === 'purple' ? 'white' : 'black',
-              textShadow: theme.accentColor === 'black' || theme.accentColor === 'blue' || theme.accentColor === 'purple' ? '0 1px 2px rgba(0, 0, 0, 0.3)' : '0 1px 2px rgba(255, 255, 255, 0.3)',
-              boxShadow: `0 0 15px ${phaseColors[phase]}66, 0 2px 8px rgba(0, 0, 0, 0.1)`,
+              textShadow: theme.accentColor === 'black' || theme.accentColor === 'blue' || theme.accentColor === 'purple' 
+                ? '0 1px 3px rgba(0, 0, 0, 0.5)' 
+                : '0 1px 3px rgba(255, 255, 255, 0.5)',
+              boxShadow: `0 0 20px ${phaseColors[phase]}99, 0 2px 8px rgba(0, 0, 0, 0.2)`,
             }}
           >
             Save Changes

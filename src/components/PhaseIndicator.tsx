@@ -22,7 +22,7 @@ export const PhaseIndicator = ({ phase, workSessionsCompleted, totalSessionsBefo
   return (
     <div className="text-center space-y-2">
       <h2 
-        className="text-3xl md:text-4xl font-bold transition-colors duration-600"
+        className="text-3xl md:text-4xl font-bold transition-colors duration-600 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]"
         style={{ color: phaseColors[phase] }}
       >
         {phaseNames[phase]}

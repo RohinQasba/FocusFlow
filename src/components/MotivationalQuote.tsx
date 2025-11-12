@@ -51,7 +51,7 @@ export const MotivationalQuote = ({ phase, workSessionsCompleted }: Motivational
   return (
     <div 
       key={key}
-      className="text-center text-xl md:text-2xl font-light text-muted-foreground animate-fade-in"
+      className="text-center text-xl md:text-2xl font-light text-muted-foreground animate-fade-in drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]"
     >
       "{quote}"
     </div>

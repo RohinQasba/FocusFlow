@@ -68,7 +68,7 @@ export const TimerArc = ({ phase, timeLeft, totalTime }: TimerArcProps) => {
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="text-center">
           <div 
-            className={`font-bold tabular-nums transition-colors duration-600 ${
+            className={`font-bold tabular-nums transition-colors duration-600 drop-shadow-[0_4px_12px_rgba(0,0,0,0.95)] ${
               theme.font === 'orbitron' ? 'text-5xl md:text-6xl' : 'text-6xl md:text-7xl'
             }`}
             style={{ color: phaseColors[phase] }}

@@ -23,7 +23,7 @@ export const WallpaperBackground = ({ wallpaperId }: WallpaperBackgroundProps) =
         }}
       />
       <div 
-        className="fixed inset-0 bg-background/40 backdrop-blur-[2px] transition-all duration-1000"
+        className="fixed inset-0 bg-background/60 backdrop-blur-[3px] transition-all duration-1000"
         style={{ zIndex: -1 }}
       />
     </>
