@@ -72,6 +72,8 @@ const Index = () => {
 
   // Auto dark mode state
   const [isDarkModeActive, setIsDarkModeActive] = useState(false);
+  // Activity tracking for resetting timers
+  const [activityKey, setActivityKey] = useState(0);
 
   // Auto dark mode after 10 seconds
   useEffect(() => {
@@ -94,7 +96,7 @@ const Index = () => {
       document.documentElement.classList.remove('dark');
       setIsDarkModeActive(false);
     }
-  }, [timer.isRunning, timer.settings.autoDarkMode]);
+  }, [timer.isRunning, timer.settings.autoDarkMode, activityKey]);
 
   // Screen dimming effect
   const [isDimmed, setIsDimmed] = useState(false);
@@ -123,16 +125,22 @@ const Index = () => {
       document.body.style.transition = '';
       setIsDimmed(false);
     }
-  }, [timer.isRunning, timer.settings.screenDimming, isDimmed]);
+  }, [timer.isRunning, timer.settings.screenDimming, isDimmed, activityKey]);
 
-  // Handle click to restore brightness (but keep dark mode)
+  // Handle click to restore brightness and dark mode, and reset timers
   const handleScreenClick = useCallback(() => {
-    if (isDimmed && timer.isRunning) {
-      console.log('Restoring brightness on click');
+    if (timer.isRunning && (isDimmed || isDarkModeActive)) {
+      console.log('User activity detected - resetting dark mode and dimming');
+      // Remove dark mode
+      document.documentElement.classList.remove('dark');
+      setIsDarkModeActive(false);
+      // Restore brightness
       document.body.style.filter = '';
       setIsDimmed(false);
+      // Reset timers by incrementing activity key
+      setActivityKey(prev => prev + 1);
     }
-  }, [isDimmed, timer.isRunning]);
+  }, [isDimmed, isDarkModeActive, timer.isRunning]);
 
   // Handle brown noise for work phase
   useEffect(() => {
