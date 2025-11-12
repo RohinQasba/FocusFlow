@@ -70,6 +70,9 @@ const Index = () => {
     };
   }, [timer.isRunning]);
 
+  // Auto dark mode state
+  const [isDarkModeActive, setIsDarkModeActive] = useState(false);
+
   // Auto dark mode after 10 seconds
   useEffect(() => {
     const autoDarkEnabled = timer.settings.autoDarkMode !== false; // Default to true if not set
@@ -79,6 +82,7 @@ const Index = () => {
       const timeout = setTimeout(() => {
         console.log('Activating dark mode now');
         document.documentElement.classList.add('dark');
+        setIsDarkModeActive(true);
       }, 10000);
       return () => {
         console.log('Cleaning up dark mode timer');
@@ -88,6 +92,7 @@ const Index = () => {
       // Remove dark mode when timer stops
       console.log('Removing dark mode');
       document.documentElement.classList.remove('dark');
+      setIsDarkModeActive(false);
     }
   }, [timer.isRunning, timer.settings.autoDarkMode]);
 
@@ -95,10 +100,10 @@ const Index = () => {
   const [isDimmed, setIsDimmed] = useState(false);
 
   useEffect(() => {
-    const autoDarkEnabled = timer.settings.autoDarkMode !== false;
     const dimmingEnabled = timer.settings.screenDimming !== false;
     
-    if (timer.isRunning && dimmingEnabled && autoDarkEnabled) {
+    // Dimming works independently of dark mode
+    if (timer.isRunning && dimmingEnabled) {
       console.log('Starting dimming timer - will dim in 15 seconds');
       const timeout = setTimeout(() => {
         console.log('Dimming screen now');
@@ -118,7 +123,7 @@ const Index = () => {
       document.body.style.transition = '';
       setIsDimmed(false);
     }
-  }, [timer.isRunning, timer.settings.screenDimming, timer.settings.autoDarkMode, isDimmed]);
+  }, [timer.isRunning, timer.settings.screenDimming, isDimmed]);
 
   // Handle click to restore brightness (but keep dark mode)
   const handleScreenClick = useCallback(() => {
@@ -206,7 +211,7 @@ const Index = () => {
 
   return (
     <>
-      <WallpaperBackground wallpaperId={theme.wallpaper} />
+      <WallpaperBackground wallpaperId={theme.wallpaper} isDarkMode={isDarkModeActive} />
       
       {showVictory && (
         <VictoryScreen 

@@ -2,12 +2,23 @@ import { getWallpaperById } from '@/data/wallpapers';
 
 interface WallpaperBackgroundProps {
   wallpaperId: string;
+  isDarkMode?: boolean;
 }
 
-export const WallpaperBackground = ({ wallpaperId }: WallpaperBackgroundProps) => {
+export const WallpaperBackground = ({ wallpaperId, isDarkMode = false }: WallpaperBackgroundProps) => {
   const wallpaper = getWallpaperById(wallpaperId);
 
   if (!wallpaper) return null;
+
+  // When dark mode is active, show pure black background
+  if (isDarkMode) {
+    return (
+      <div
+        className="fixed inset-0 bg-black transition-all duration-1000 ease-in-out"
+        style={{ zIndex: -2 }}
+      />
+    );
+  }
 
   // For solid colors, use the color directly instead of an image
   const isSolidColor = wallpaper.category === 'solid-colors';
